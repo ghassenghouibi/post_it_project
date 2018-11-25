@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Connexion</title> 
+        <link rel="stylesheet" href="../public/style.css"> 
+        <link rel="stylesheet" href="../public/inscription.css">
+        <link rel="icon" href="../public/images/favicon.ico" />
+    </head>
+    <body class="text-center">
+        <% include ./partials/header %>
+       
+        <form action="/connexion" method="POST" class="form-signin" >
+                <div class="text-center">
+                        <img src="../public/images/post_it_logo.png" class="rounded" alt="picture" width="124" height="124">
+                </div>
+                
+                <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
+                <label for="inputEmail" class="sr-only">Email</label>
+                <input type="email" id="inputEmail" name="Email" class="form-control" placeholder="Email" required autofocus>
+                <label for="inputPassword" class="sr-only">Mot de passe</label>
+                <input type="password" id="inputPassword" name="Password" class="form-control" placeholder="Mot de passe" required autocomplete="currentpassword"> 
+                <a href="/forgotpassword">Mot de passe oublié ?</a> </li>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Connexion</button>
+        </form>
+        <% include ./partials/footer %> 
+        
+
+    </body>
+
+</html>

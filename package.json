@@ -1,0 +1,30 @@
+{
+  "name": "post_it_project",
+  "version": "1.0.0",
+  "description": "On a tendance a oublié nos idées,ou a repartir les tâches du coup, certains gens se servent des post_it Dans le cadre du cours de dévelepment web je vais créer un site à l'aide de html,css,javascript, coté Front End et coté back End je vais travailler avec nodejs et phpmyadmin qui va gérer ma base de données le principe est simple faire une API qui à la fois se sert du identification et aussi qui permet de notés nos idéés dans des posts it mais avec un effet et pour ça je vais me servir d'un algorithm qui permet de mettre les post-it par tout et suivre la souris d'utilisateur et lui passer les posts it nécessaire",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghassenghouibi/post_it_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ghassenghouibi/post_it_project/issues"
+  },
+  "homepage": "https://github.com/ghassenghouibi/post_it_project#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "multer": "^1.4.1",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.6"
+  }
+}
