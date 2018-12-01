@@ -1,5 +1,7 @@
 
 canvas{
+    position: relative;
+    background-position-x: 0%; 
     margin-top:10px;
     padding-block-end: 0px;
     border-style: solid;
