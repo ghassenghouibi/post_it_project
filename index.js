@@ -22,23 +22,37 @@ app.get('/connexion/connected',function (req,res){
     res.render('connected');
 });
 //Connection post & get
-app.get('/connexion',urlencodedParser,function (req,res){
-    
-    dataBase.findUserInDataBase(req.body.Email,req.body.Motdepasse);
-    res.render('connexion');
+app.get('/connexion',function (req,res){
+    res.render('connexion',{message: ''});    
 });
-app.post('/connexion',function(req,res){
-    res.render('connected');    
+app.post('/connexion',urlencodedParser,function(req,res){
+    dataBase.findUserInDataBase(req.body.email,req.body.motdepasse,function(result){
+        if(result==0){
+            res.render('connexion',{message: 'Email ou mot de passe incorrect'});    
+        }
+        else{
+            res.render('connected');
+        }
+    });   
 });
 
-//Inscription post & getd 
+//Inscription post & get
 app.get('/inscription',function (req,res){
-    res.render('inscription');
+    res.render('inscription',{message:''});
 });
+
 app.post('/inscription',urlencodedParser,function (req,res){
-    dataBase.addUserInDataBase(req.body.Nom,req.body.Prenom,req.body.Email,req.body.Motdepasse);
-    res.render('inscriptionsuccess');   
-    
+    dataBase.addUserInDataBase(req.body.nom,req.body.prenom,req.body.email,req.body.motdepasse,function(result)
+    {
+        console.log(result);
+        if(result==0){
+            res.render('inscription',{message:'l\' adresse email existe déjà'});
+        }
+        else{
+            res.render('inscription',{message:'Votre inscription à était prise en compte'});
+        }
+    });
+
 });
 
 //Forgot Password post & get

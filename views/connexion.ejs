@@ -9,7 +9,10 @@
     </head>
     <body class="text-center">
         <% include ./partials/header %>
-       
+        
+        <% if(message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div> 
+        <% } %>
         <form action="/connexion" method="POST" class="form-signin" >
                 <div class="text-center">
                         <img src="../public/images/post_it_logo.png" class="rounded" alt="picture" width="124" height="124">
@@ -17,9 +20,9 @@
                 
                 <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
                 <label for="inputEmail" class="sr-only">Email</label>
-                <input type="email" id="inputEmail" name="Email" class="form-control" placeholder="Email" required autofocus>
+                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email" required autofocus>
                 <label for="inputPassword" class="sr-only">Mot de passe</label>
-                <input type="password" id="inputPassword" name="Password" class="form-control" placeholder="Mot de passe" required autocomplete="currentpassword"> 
+                <input type="password" id="inputPassword" name="motdepasse" class="form-control" placeholder="Mot de passe" required autocomplete="currentpassword"> 
                 <a href="/forgotpassword">Mot de passe oublié ?</a> </li>
                 <button class="btn btn-lg btn-success btn-block" type="submit">Connexion</button>
         </form>
