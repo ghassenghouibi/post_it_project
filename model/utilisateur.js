@@ -46,12 +46,8 @@ class Database{
     }
 
     findUserInDataBase(email,motdepasse,done){
-        var newUserMysql = {
-            email:email,
-            motdepasse: bcrypt.hashSync(motdepasse, null, null)
-        };
-
-        connection.query("SELECT * FROM utilisateur WHERE email=?",[newUserMysql.email] ,function (error, rows) {
+       
+        connection.query("SELECT * FROM utilisateur WHERE email=?",[email] ,function (error, rows) {
 
             if (error) throw error;
             
