@@ -3,51 +3,19 @@
     <head>
         <meta charset="utf-8">
         <title>Post it</title> 
-        <link rel="stylesheet" href="../public/styleconnected.css">
-        <link rel="stylesheet" href="../public/style.css">
+        <link rel="stylesheet" href="../public/css/style.css">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="icon" href="../public/images/favicon.ico" />
-        <link type="script" href="../public/js/postit.js">
+        <script src="../public/js/connected.js"></script>
     </head>
-    <body onmousemove="souris(event);">
+    <body>
         <div>
-            <button class="btn btn-outline-success pull-left" id="Ajouter" >Ajouter</button>
+            <button class="btn btn-outline-success pull-left" id="Ajouter">Ajouter</button>
             <button class="btn btn-outline-danger  pull-left" id="Supprimer" >Supprimer</button>
             <button class="btn btn-outline-primary pull-left" id="Modifer" >Modifier</button>
             <button class="btn btn-outline-warning pull-right" id="Deconnexion" >Deconnexion</button>
             <button class="btn btn-outline-primary pull-right" id="Profile" >Profile</button>
             <button class="btn btn-outline-secondary pull-right" id="Informations" >Informations</button>
-            <input type="text" id="coordonnes" class="form-control center" value="inconnues" readonly="readonly" width="50px" height="10px" />
-
         </div>
-      
-        <canvas id="myCanvas">
-        
-
-        </canvas>
-
-        <script type="text/javascript">
-             function draw(){
-                var drawing = document.getElementById("myCanvas");
-                var con = drawing.getContext("2d");
-                con.fillStyle = "black";
-                //Il faut une photo et on la bouge aprés
-                con.moveTo(x,-100);
-
-                con.fillRect(x,-100, 25, 25);
-            } 
-            draw();
-
-            function souris(event)
-            {
-                var x = event.clientX;
-                var y = event.clientY;
-                
-                document.getElementById('coordonnes').value = x + ', ' + y;
-              
-            }
-        </script>
-            
-
     </body>
 </html>

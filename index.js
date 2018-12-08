@@ -26,7 +26,7 @@ app.get('/connexion',function (req,res){
     res.render('connexion',{message: ''});    
 });
 app.post('/connexion',urlencodedParser,function(req,res){
-    dataBase.findUserInDataBase(req.body.email,req.body.motdepasse,function(result){
+    dataBase.chercherLutilisateurDansLabaseDeDonnees(req.body.email,req.body.motdepasse,function(result){
         if(result==0){
             res.render('connexion',{message: 'Email ou mot de passe incorrect'});    
         }
@@ -42,7 +42,7 @@ app.get('/inscription',function (req,res){
 });
 
 app.post('/inscription',urlencodedParser,function (req,res){
-    dataBase.addUserInDataBase(req.body.nom,req.body.prenom,req.body.email,req.body.motdepasse,function(result)
+    dataBase.ajouterUnUtilisateurDansLaBaseDeDonnes(req.body.nom,req.body.prenom,req.body.email,req.body.motdepasse,function(result)
     {
         console.log(result);
         if(result==0){
