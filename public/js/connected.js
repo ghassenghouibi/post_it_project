@@ -1,5 +1,5 @@
 window.onload = main;
-
+var id=0;
 /* fonction elementFactory(text,attach,x,y,color)
 *brief la création des elements  
 *param type le type d'element a créer
@@ -9,11 +9,18 @@ window.onload = main;
 *param color la couleur
 *return un element 
 */
-function elementFactory(type,text,x,y,color){
+function elementFactory(id,type,text,x,y,color){
     var element=document.createElement(type);
     document.body.appendChild(element);
     element.innerHTML=text;
+    element.id=id;
+    element.style.cursor='move';
+    element.style.textAlign='center';
+    element.style.font='x-large arial, sans-serif';
+    element.style.wordWrap='break-word';
     element.style.position='absolute';
+    element.style.WebkitBorderBottomRightRadius="500px 20px";
+    element.style.BoxShadow='10px 10px 5px #656565';
     element.style.left=x+"px";
     element.style.top=y+"px";
     element.style.width=200+"px";
@@ -53,7 +60,8 @@ function saisieDepostIt(){
     let x=getRandomIntInclusive(0,1500);
     let y=getRandomIntInclusive(0,1000);
     let color=randomColor();
-    element=elementFactory('div',text,x,y,color);
+    id++;
+    element=elementFactory(id,'div',text,x,y,color);
 
 }
 /* fonction sourisEvenement(event)
@@ -73,6 +81,10 @@ function frameloop(){
     window.requestAnimationFrame(frameloop);
     sourisEvenement(event);
 }
+
+function deconnexion(){
+    window.location = "/";
+}
 //TODO ALGORITHME DE CHEVAUCHEMENT
 
 /*fonction main
@@ -80,5 +92,8 @@ function frameloop(){
 */
 function main (){
     var buttonAjouter=document.getElementById('Ajouter');
-    buttonAjouter.addEventListener("click",saisieDepostIt);   
+    buttonAjouter.addEventListener("click",saisieDepostIt);
+    var buttonDeconnexion=document.getElementById('Deconnexion');
+    buttonDeconnexion.addEventListener("click",deconnexion);
+   
 }

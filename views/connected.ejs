@@ -3,19 +3,23 @@
     <head>
         <meta charset="utf-8">
         <title>Post it</title> 
-        <link rel="stylesheet" href="../public/css/style.css">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="../public/css/connected.css">
+        <link href="https://www.glyphicons.com/">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="icon" href="../public/images/favicon.ico" />
         <script src="../public/js/connected.js"></script>
     </head>
+    
     <body>
         <div>
-            <button class="btn btn-outline-success pull-left" id="Ajouter">Ajouter</button>
-            <button class="btn btn-outline-danger  pull-left" id="Supprimer" >Supprimer</button>
-            <button class="btn btn-outline-primary pull-left" id="Modifer" >Modifier</button>
-            <button class="btn btn-outline-warning pull-right" id="Deconnexion" >Deconnexion</button>
-            <button class="btn btn-outline-primary pull-right" id="Profile" >Profile</button>
-            <button class="btn btn-outline-secondary pull-right" id="Informations" >Informations</button>
+            <button class="btn btn-warning" id="Deconnexion" ><span class="glyphicon glyphicon-log-out"></span></button>
         </div>
+        <div>
+            <button class="btn btn-success" id="Ajouter" ><span class="glyphicon glyphicon-plus-sign"></span></button>
+        </div>
+        <div>
+            <button class="btn btn-danger" id="Supprimer" ><span class="glyphicon glyphicon-trash"></span></button>
+        </div>
+
     </body>
 </html>
