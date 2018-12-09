@@ -1,5 +1,7 @@
 window.onload = main;
 var id=0;
+var tabx=new Array();
+var taby=new Array();
 /* fonction elementFactory(text,attach,x,y,color)
 *brief la création des elements  
 *param type le type d'element a créer
@@ -50,18 +52,49 @@ function randomColor(){
     return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 }
 
+function verifierLacollision(x,y){
+    for(let i=0;i<tabx.length;i++){
+        if (tabx[i] < x +200 &&
+            tabx[i] + 200 > x &&
+
+            taby[i] < y + 250 &&
+            taby[i] +250 > y) {
+                return 0;
+            }
+        }
+    return 1;
+}
+
 /*fonction saisieDepostIt()
 * brief fonction destinée a la création de post it
 *return element ajouté
 */
   
 function saisieDepostIt(){
+
     var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
-    let x=getRandomIntInclusive(0,1500);
-    let y=getRandomIntInclusive(0,1000);
-    let color=randomColor();
-    id++;
-    element=elementFactory(id,'div',text,x,y,color);
+
+    var x=getRandomIntInclusive(0,1500);
+    var y=getRandomIntInclusive(0,1000);
+    if(tabx.length<1){
+        console.log("once");
+        tabx.push(x);
+        taby.push(y);
+        let color=randomColor();
+        id++;
+        element=elementFactory(id,'div',text,x,y,color);
+    }
+    else{
+        do{
+            x=getRandomIntInclusive(0,1500);
+            y=getRandomIntInclusive(0,1000);
+        }while(!(verifierLacollision(x,y)));         
+        tabx.push(x);
+        taby.push(y);
+        let color=randomColor();
+        id++;
+        element=elementFactory(id,'div',text,x,y,color);
+    }
 
 }
 /* fonction sourisEvenement(event)
@@ -85,7 +118,7 @@ function frameloop(){
 function deconnexion(){
     window.location = "/";
 }
-//TODO ALGORITHME DE CHEVAUCHEMENT
+
 
 /*fonction main
 *brief la fonction principale
@@ -95,5 +128,5 @@ function main (){
     buttonAjouter.addEventListener("click",saisieDepostIt);
     var buttonDeconnexion=document.getElementById('Deconnexion');
     buttonDeconnexion.addEventListener("click",deconnexion);
-   
+
 }
