@@ -135,7 +135,6 @@ function recupererToken(){
 *brief la fonction principale
 */
 function main (){
-    recupererToken();
     var buttonAjouter=document.getElementById('Ajouter');
     buttonAjouter.addEventListener("click",saisieDepostIt);
     var buttonDeconnexion=document.getElementById('Deconnexion');

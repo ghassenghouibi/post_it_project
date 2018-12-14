@@ -11,6 +11,7 @@
     </head>
     
     <body>
+            <div id="token" style="display:none"> <%- token %> </div>
         <div>
             <button class="btn btn-warning" id="Deconnexion" ><span class="glyphicon glyphicon-log-out"></span></button>
         </div>
@@ -21,4 +22,10 @@
             <button class="btn btn-danger" id="Supprimer" ><span class="glyphicon glyphicon-trash"></span></button>
         </div>
     </body>
+    <script>
+        
+        var test=JSON.parse( '{ "token" : "<%- token %>"}');
+        console.log(test.token);
+        localStorage.setItem('token',test.token);
+    </script>
 </html>
