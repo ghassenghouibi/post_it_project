@@ -1,15 +1,16 @@
 window.onload = main;
+
 var id=0;
 var tabx=new Array();
 var taby=new Array();
-/* fonction elementFactory(text,attach,x,y,color)
+/** fonction elementFactory(text,attach,x,y,color)
 *brief la création des elements  
-*param type le type d'element a créer
-*param text le text a inserer
-*param x coordonnées sur l'axe x
-*param y coordonnées sur l'axe y
-*param color la couleur
-*return un element 
+* @param type le type d'element a créer
+* @param text le text a inserer
+* @param x coordonnées sur l'axe x
+* @param y coordonnées sur l'axe y
+* @param color la couleur
+* @return un element 
 */
 function elementFactory(id,type,text,x,y,color){
     var element=document.createElement(type);
@@ -32,11 +33,11 @@ function elementFactory(id,type,text,x,y,color){
     return element;
 }
 
-/*fonction getRandomInInclusive(min,max)
+/**fonction getRandomInInclusive(min,max)
 /* brief fonction qui permet de retouner une valeur compris entre min et max y compris
-*param min valeur min
-*param max valeur max
-*return une valeur comprise entre les valeurs min et max
+* @param min valeur min
+* @param max valeur max
+* @return une valeur comprise entre les valeurs min et max
 */
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -46,7 +47,7 @@ function getRandomIntInclusive(min, max) {
 
 /** fonction randomColor
  * brief permet de générer une couleur aléatoire
- * return la couleur
+ * @return la couleur
  */
 function randomColor(){
     return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
@@ -65,17 +66,16 @@ function verifierLacollision(x,y){
     return 1;
 }
 
-/*fonction saisieDepostIt()
+/**fonction saisieDepostIt()
 * brief fonction destinée a la création de post it
-*return element ajouté
+* @return element ajouté
 */
   
 function saisieDepostIt(){
 
     var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
-
-    var x=getRandomIntInclusive(0,1500);
-    var y=getRandomIntInclusive(0,1000);
+    var x=getRandomIntInclusive(0,5000);
+    var y=getRandomIntInclusive(0,5000);
     if(tabx.length<1){
         console.log("once");
         tabx.push(x);
@@ -86,20 +86,22 @@ function saisieDepostIt(){
     }
     else{
         do{
-            x=getRandomIntInclusive(0,1500);
-            y=getRandomIntInclusive(0,1000);
+            x=getRandomIntInclusive(-5000,5000);
+            y=getRandomIntInclusive(-5000,5000);
         }while(!(verifierLacollision(x,y)));         
         tabx.push(x);
         taby.push(y);
         let color=randomColor();
         id++;
         element=elementFactory(id,'div',text,x,y,color);
+        var DB=new database();
+        DB.ajouterLePostitAlaBaseDeDonnees(1,x,y,0,0,0,text,color);
     }
 
 }
-/* fonction sourisEvenement(event)
+/** fonction sourisEvenement(event)
 *brief capture la position de la souris sur les deux axes x et y a un evenement précis et les affiches à la console
-*event l'evenement à préciser
+*@param event l'evenement à préciser
 */
 function sourisEvenement(event)
 {
@@ -117,16 +119,27 @@ function frameloop(){
 
 function deconnexion(){
     window.location = "/";
+    localStorage.removeItem('token');
+
 }
 
-
+/** fonction recupererToken()
+ * 
+ */
+function recupererToken(){
+    var test=JSON.parse( '{ "token" : "<%- token %>"}');
+    console.log(test.token);
+    localStorage.setItem('token',test.token);
+}
 /*fonction main
 *brief la fonction principale
 */
 function main (){
+    recupererToken();
     var buttonAjouter=document.getElementById('Ajouter');
     buttonAjouter.addEventListener("click",saisieDepostIt);
     var buttonDeconnexion=document.getElementById('Deconnexion');
     buttonDeconnexion.addEventListener("click",deconnexion);
+
 
 }

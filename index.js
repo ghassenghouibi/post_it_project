@@ -1,5 +1,7 @@
 const express=require('express');
 const bodyParser=require('body-parser');
+const jwt=require('jsonwebtoken');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const app=express();
 var urlencodedParser=bodyParser.urlencoded({extended:false});
 const DB=require('./model/utilisateur');
@@ -14,31 +16,29 @@ app.set('views','./views');
 app.set('view engine','ejs');
 
 //La page d'acceuil
-app.get('/',function (req,res){
+app.get('/',function (req,res){""
     res.render('index');
-});
-
-app.get('/connexion/connected',function (req,res){
-    res.render('connected');
 });
 //Connection post & get
 app.get('/connexion',function (req,res){
     res.render('connexion',{message: ''});    
 });
+const secret='uajzosmehfncozuhtn359S62vefmpw82dL0oz6ozalsovefmpxnw8ozIZSds2dozfsfsfkzef';
 app.post('/connexion',urlencodedParser,function(req,res){
     dataBase.chercherLutilisateurDansLabaseDeDonnees(req.body.email,req.body.motdepasse,function(result){
         if(result==0){
             res.render('connexion',{message: 'Email ou mot de passe incorrect'});    
         }
         else{
-            res.render('connected');
+            const myToken=jwt.sign({iss:"http://localhost:8080/connexion",user:req.body.email,role:"moderator",admin:false},secret);
+            res.render('connected',{token:myToken});
         }
     });   
 });
 
 //Inscription post & get
 app.get('/inscription',function (req,res){
-    res.render('inscription',{message:''});
+    res.render('inscription',{messagesuccess:'',messagefail:''});
 });
 
 app.post('/inscription',urlencodedParser,function (req,res){
@@ -46,10 +46,10 @@ app.post('/inscription',urlencodedParser,function (req,res){
     {
         console.log(result);
         if(result==0){
-            res.render('inscription',{message:'l\' adresse email existe déjà'});
+            res.render('inscription',{messagefail:'l\' adresse email existe déjà',messagesuccess:''});
         }
         else{
-            res.render('inscription',{message:'Votre inscription à était prise en compte'});
+            res.render('inscription',{messagesuccess:'Votre inscription à était prise en compte',messagefail:''});
         }
     });
 
@@ -67,7 +67,6 @@ app.post('/forgotpassword',function(req,res){
 app.get('/:id',function(req,res){
     res.render('404error');
 });
-
 
 //Serveur à l'écoute
 app.listen(PORT,function(){

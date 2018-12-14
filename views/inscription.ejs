@@ -12,8 +12,11 @@
     <body class="text-center">
         <% include ./partials/header %>
 
-        <% if(message.length > 0) { %>
-            <div class="alert alert-success"><%= message %></div> 
+        <% if(messagefail.length > 0) { %>
+            <div class="alert alert-danger"><%= messagefail %></div> 
+        <% } %>
+        <% if(messagesuccess.length > 0) { %>
+            <div class="alert alert-success"><%= messagesuccess %></div> 
         <% } %>
         <form form action="/inscription" method="POST" class="form-signin">
 
@@ -38,8 +41,7 @@
         </form>
         
         <% include ./partials/footer %>
-
-
+    
     </body>
 
 </html>
