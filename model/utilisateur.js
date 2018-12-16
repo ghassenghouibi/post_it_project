@@ -95,8 +95,6 @@ class Database{
                 done(0);
             }
         });
-
-
     }
     /** fonction ajouterLePostitAlaBaseDeDonnees()
      *brief cette fonction permet d'ajouter les differents élément de post_it dans la base de données
@@ -126,8 +124,111 @@ class Database{
     /**fonction chargerLesPostitDeLaBaseDeDonnees
      * 
      */
+    chargerLesPostitDeLaBaseDeDonnees(idUtilisateur,done){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_utilisateur=?";
+        connection.query(search,[idUtilisateur] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('Trouve');
+                //ici normalement on renvoie un objet json
+                //done((rows[0].coordonneesX,rows[0].coordonneesY,rows[0].distance,rows[0].angleX,rows[0].tangente,rows[0].text,rows[0].couleur));
+            }else{
+                done(0);
+            }
+        });
+    }
+    /**fonction renvoyerLesCoordonnees
+     * @param idPostit c'est l'id du post_it
+     * @param done ou on va reçevoir le resultat de la rêquete
+     */
+    renvoyerLesCoordonnees(idPostit,done){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_post_it=?";
+        connection.query(search,[idPostit] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('Coordonnes Trouve');
+                done(rows[0].coordonneesX,rows[0].coordonneesY);
+            }else{
+                done(0);
+            }
+        });
+    }
+    /**fonction renvoyerLaCouleur
+     * @param idPostit c'est l'id du post_it
+     * @param done ou on va reçevoir le resultat de la rêquete 
+     */
+    renvoyerLaCouleur(idPostit,done){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_post_it=?";
+        connection.query(search,[idPostit] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('Couleur Trouve');
+                done(rows[0].couleur);
+            }else{
+                done(0);
+            }
+        });
+    }
+    /**fonction renvoyerLetext
+     * @param idPostit c'est l'id du post_it
+     * @param done ou on va reçevoir le resultat de la rêquete
+     */
+    renvoyerLeText(idPostit,done){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_post_it=?";
+        connection.query(search,[idPostit] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('Text trouvé');
+                done(rows[0].text);
+            }else{
+                done(0);
+            }
+        });
+    }
+    /**fonction renvoyerLaDistance
+     * @param idPostit c'est l'id du post_it
+     * @param done ou on va reçevoir le resultat de la rêquete
+     */
+    renvoyerLadistance(idPostit,done){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_post_it=?";
+        connection.query(search,[idPostit] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('Distance trouvé');
+                done(rows[0].distance);
+            }else{
+                done(0);
+            }
+        });
+    }
 
+    /**fonction renvoyerLangle
+     * @param idPostit c'est l'id du post_it
+     * @param done ou on va reçevoir le resultat de la rêquete
+     */
+    renvoyerLangle(idPostit,done){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_post_it=?";
+        connection.query(search,[idPostit] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('angle trouvé');
+                done(rows[0].angleX);
+            }else{
+                done(0);
+            }
+        });
+    }
 
+    /**fonction renvoyerLatangente
+     * @param idPostit c'est l'id du post_it
+     * @param done ou on va reçevoir le resultat de la rêquete
+     */
+    renvoyerLatangente(idPostitndone){
+        var search="SELECT * FROM post_it_coordonnees WHERE id_post_it=?";
+        connection.query(search,[idPostit] ,function (err, rows) {   
+            if(rows[0]){
+                console.log('angle trouvé');
+                done(rows[0].tangente);
+            }else{
+                done(0);
+            }
+        });
+    }
+    
 
 }
 module.exports=Database;
