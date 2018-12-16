@@ -16,8 +16,14 @@ app.set('views','./views');
 app.set('view engine','ejs');
 
 //La page d'acceuil
-app.get('/',function (req,res){""
+app.get('/',function (req,res){
     res.render('index');
+});
+//Connected page
+app.get('/connected',function(req,res){
+    //nrmlment le serveur reçoit le token (il voit avec qui on a affaire) sinon il peut le faire refesh s'il veut
+    //également il manque la vérification
+    res.render('connected',{token:'no'});
 });
 //Connection post & get
 app.get('/connexion',function (req,res){

@@ -129,7 +129,12 @@ function deconnexion(){
 function recupererToken(){
     var test=JSON.parse( '{ "token" : "<%- token %>"}');
     console.log(test.token);
-    localStorage.setItem('token',test.token);
+    let x=test.token.length;
+    console.log("la taille de token",x);
+    if(x>5)
+        localStorage.setItem('token',test.token);
+    else
+        console.log('i know you men relax ');
 }
 /*fonction main
 *brief la fonction principale

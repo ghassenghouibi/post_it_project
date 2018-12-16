@@ -19,4 +19,14 @@
         
     
     </body>
+    <script>
+    if (localStorage.getItem("token") === null) {
+        console.log("hello")
+    }else{
+        console.log("catch it body");
+        //envoyer le token au serveur
+        let x=localStorage.getItem('token');
+        window.location = "/connected";
+    }
+    </script>
 </html>
