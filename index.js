@@ -1,7 +1,6 @@
 const express=require('express');
 const bodyParser=require('body-parser');
 const jwt=require('jsonwebtoken');
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const app=express();
 var urlencodedParser=bodyParser.urlencoded({extended:false});
 const DB=require('./model/utilisateur');
@@ -10,7 +9,7 @@ const PORT=8080;
 
 //Pour l'utilisateur des ficheirs statiques
 app.use('/public',express.static('public'));
-
+app.use('/controller',express.static('controller'));
 //On précise que nos views sont dans le dossier view et le view engine  c'est le format ejs
 app.set('views','./views');
 app.set('view engine','ejs');
@@ -20,10 +19,10 @@ app.get('/',function (req,res){
     res.render('index');
 });
 //Connected page
-app.get('/connected',function(req,res){
+app.get('/home',function(req,res){
     //nrmlment le serveur reçoit le token (il voit avec qui on a affaire) sinon il peut le faire refesh s'il veut
     //également il manque la vérification
-    res.render('connected',{token:'no'});
+    res.render('home',{token:'no'});
 });
 //Connection post & get
 app.get('/connexion',function (req,res){
@@ -37,7 +36,7 @@ app.post('/connexion',urlencodedParser,function(req,res){
         }
         else{
             const myToken=jwt.sign({iss:"http://localhost:8080/connexion",user:req.body.email,role:"moderator",admin:false},secret);
-            res.render('connected',{token:myToken});
+            res.render('home',{token:myToken});
         }
     });   
 });

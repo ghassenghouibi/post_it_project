@@ -1,5 +1,6 @@
 body{
     height: 100%;
+    width: 100%;
 }
 #Ajouter{
     border-radius: 50%;
@@ -26,4 +27,14 @@ body{
     top: 0px;
     right: 0px;
 
+}
+
+
+.hovered{
+    background: #f4f4f4;
+    border-style: dashed;
+}
+
+.invisible{
+    display: none;
 }

@@ -3,11 +3,12 @@
     <head>
         <meta charset="utf-8">
         <title>Post it</title> 
+        <link rel="icon" href="../public/images/favicon.ico" />
         <link rel="stylesheet" href="../public/css/connected.css">
         <link href="https://www.glyphicons.com/">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="icon" href="../public/images/favicon.ico" />
-        <script type="text/javascript" src="../public/js/connected.js"></script>
+        <script src="/public/js/tools.js"></script>
+        <script src="/controller/postitcontroller.js"></script>
     </head>
     
     <body>
@@ -23,14 +24,10 @@
         </div>
     </body>
     <script>
-        
         var test=JSON.parse( '{ "token" : "<%- token %>"}');
-        console.log(test.token);
         let x=test.token.length;
-        console.log("la taille de token",x);
-        if(x>5)
+        if(x> 5 ){
             localStorage.setItem('token',test.token);
-        else
-            console.log('i know you men relax ');
+        }
     </script>
 </html>
