@@ -31,6 +31,8 @@ function randomColor(){
 */
 function elementFactory(id,type,text,x,y,color){
     var element=document.createElement(type);
+    //var canvas=document.getElementById('post-it');
+    //canvas.appendChild(element);
     document.body.appendChild(element);
     element.innerHTML=text;
     element.id=id;
@@ -41,6 +43,9 @@ function elementFactory(id,type,text,x,y,color){
     element.style.font='x-large arial, sans-serif';
     element.style.wordWrap='break-word';
     element.style.position='relative';
+    if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
+        element.style.display='none';
+    }
     element.style.WebkitBorderBottomRightRadius="500px 20px";
     element.style.BoxShadow='10px 10px 5px #656565';
     element.style.left=x+"px";
@@ -52,5 +57,126 @@ function elementFactory(id,type,text,x,y,color){
     return element;
 }
 
+/** Fonction pythagore
+ * @debrif cette fonction permet de calculer le côte d'un triangle rectangle qui applique le théorme de pythagore
+ * @param x le côte x du triangle
+ * @param y le côte y du triangle
+ */
+function pythagore(x,y){
+    return Math.round(Math.sqrt(Math.pow(x,2)+Math.pow(y,2)));
+ }
+/** Fonction getdirection
+ * @debrif cette fonction permet de renvoyer la position sur un repère  rr signifie right right ll left left rb right bottom lb left bottom
+ * @param x la valeur du point x 
+ * @param y la valeur du point y
+ */ 
+function getdirection(x,y){
+    if(x>(window.innerWidth/2) && y<(window.innerHeight/2))
+       return "rr";
+    else if(x<(window.innerWidth/2) && y<(window.innerHeight/2))
+       return "ll";
+    else if(x>(window.innerWidth/2) && y>(window.innerHeight/2))
+       return "rb";
+    else
+       return "lb";
+ }
+ 
+/** Fonction angleDegree
+  * @debrif cette fonction nous renvoie l'angle (dans un triangle rectangle )
+  * @param x valeur de cote x 
+  * @param y valeur de cote y
+  *   */
+function getAngleDeg(x,y) {
+   var angleRad = Math.atan(y/x);
+   var angleDeg = angleRad * 180 / Math.PI;
+   
+   return(angleDeg);
+}
+ 
+ 
+function convertoplanx(x){
+   return Math.abs((window.innerWidth/2-x));
+}
+function convertoplany(y){
+   return Math.abs((window.innerHeight/2-y));
+}
+ 
+/** Fonction mouseangle
+ * @debrif cette fonction renvoie l'angle de la souris par rapport à l'origine
+ * @param x position x 
+ * @param y position y
+ */
+function mouseangle(x,y){
+    return getAngleDeg(Math.abs(x),pythagore(x,y)); 
+ }
+function createObject(id,posx,posy,distance,degree){
+
+   var objet={
+      id:id,
+      posx:posx,
+      posy:posy,
+      distance:distance,
+      degree:degree
+   };
+
+   return objet; 
+}
+
+function factoryposition(tab){
+   var newtab=new Array();
+   for(let i=0;i<tab.length;i++){
+
+      var objet={
+         id:tab[i].id,
+         posx:tab[i].posx,
+         posy:tab[i].posy,
+         distance:tab[i].distance,
+         degree:tab[i].degree,
+         position:getdirection(tab[i].posx,tab[i].posy)
+
+      };
+      newtab.push(objet);
+   }
+   return newtab;
+}
 
 
+function decomposetabs(tab,tabll,tabrr,tablb,tabrb){
+   
+   for(var i=0;i<tab.length;i++){
+      console.log("Position ",tab[i].position);
+      switch(tab[i].position){
+         case "ll":
+            tabll.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
+            break;
+         case "rr":
+            //console.log(tab[i]);
+            tabrr.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
+            break;
+         case "lb":
+            //console.log(tab[i]);
+            tablb.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
+            break;
+         case "rb":
+            //console.log(tab[i]);
+            tabrb.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
+            break;
+         default:
+            console.log("I can't decompose that "); 
+      }
+   }
+}
+
+
+
+function calculdistance(x,y){
+   return Math.sqrt(Math.pow((x-window.innerWidth/2),2)+Math.pow((y-window.innerHeight/2),2));
+}
+
+
+function extractleft(element){
+   return parseInt((element.style.left.split("px"))[0]);
+}
+function extracttop(element){
+   return parseInt((element.style.top.split("px"))[0]);
+}

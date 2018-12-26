@@ -1,6 +1,7 @@
 const express=require('express');
 const bodyParser=require('body-parser');
 const jwt=require('jsonwebtoken');
+const XMLHttpRequest=require('xmlhttprequest').XMLHttpRequest;
 const app=express();
 var urlencodedParser=bodyParser.urlencoded({extended:false});
 const DB=require('./model/utilisateur');
@@ -16,6 +17,10 @@ app.set('view engine','ejs');
 
 //La page d'acceuil
 app.get('/',function (req,res){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/", true);
+    xhr.send("oko");
     res.render('index');
 });
 //Connected page

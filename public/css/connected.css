@@ -38,3 +38,8 @@ body{
 .invisible{
     display: none;
 }
+canvas {
+    width: 1800px;
+    height:800px;
+    position:absolute;
+}
