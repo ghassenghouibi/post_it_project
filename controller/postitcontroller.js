@@ -258,6 +258,7 @@ function target(e){
     xhr.send(null); 				
 }
 function envoyerAuServeur(iduser,coordonneesX,coordonneesY,distance,angleX,text,couleur){
+
     var xhr=new XMLHttpRequest();
     xhr.open("POST","/home.send",true);
     xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");

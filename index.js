@@ -27,6 +27,7 @@ app.get('/',function (req,res){
 //Connected page
 
 app.get('/home',function(req,res){
+    
     res.status(200).render('home');
 });
 
