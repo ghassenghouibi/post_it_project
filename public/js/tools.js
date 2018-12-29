@@ -30,31 +30,31 @@ function randomColor(){
 * @return un element 
 */
 function elementFactory(id,type,text,x,y,color){
-    var element=document.createElement(type);
-    //var canvas=document.getElementById('post-it');
-    //canvas.appendChild(element);
-    document.body.appendChild(element);
-    element.innerHTML=text;
-    element.id=id;
-    element.className="fill"
-    element.draggable="true";
-    element.style.cursor='move';
-    element.style.textAlign='center';
-    element.style.font='x-large arial, sans-serif';
-    element.style.wordWrap='break-word';
-    element.style.position='relative';
-    if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
-        element.style.display='none';
-    }
-    element.style.WebkitBorderBottomRightRadius="500px 20px";
-    element.style.BoxShadow='10px 10px 5px #656565';
-    element.style.left=x+"px";
-    element.style.top=y+"px";
-    element.style.width=200+"px";
-    element.style.height=250+"px";
-    element.style.backgroundColor=color;
+   var element=document.createElement(type);
+   //var canvas=document.getElementById('post-it');
+   //canvas.appendChild(element);
+   document.body.appendChild(element);
+   element.innerHTML=text;
+   element.id=id;
+   element.className="fill"
+   element.draggable="true";
+   element.style.cursor='move';
+   element.style.textAlign='center';
+   element.style.font='x-large arial, sans-serif';
+   element.style.wordWrap='break-word';
+   element.style.position='relative';
+   if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
+      element.style.display='none';
+   }
+   element.style.WebkitBorderBottomRightRadius="500px 20px";
+   element.style.BoxShadow='10px 10px 5px #656565';
+   element.style.left=x+"px";
+   element.style.top=y+"px";
+   element.style.width=200+"px";
+   element.style.height=250+"px";
+   element.style.backgroundColor=color;
 
-    return element;
+   return element;
 }
 
 /** Fonction pythagore
@@ -166,8 +166,22 @@ function decomposetabs(tab,tabll,tabrr,tablb,tabrb){
       }
    }
 }
-
-
+/** Fonction centre()
+ * @debrif Fonction de création d'un petit point noir au milieu de l'ecran pour mieux se reperer
+ */
+function centre(){
+   var carre = document.createElement("div");
+   carre.style.backgroundColor="black";
+   carre.style.width = 10 + "px";
+   carre.style.height = 10 + "px";
+   carre.style.left = window.innerWidth/2 + "px";
+   carre.style.borderRadius= "30px";
+   carre.style.top = window.innerHeight/2 + "px";
+   carre.id="centre";
+   carre.style.position = "absolute";
+   document.body.appendChild(carre);
+   return carre;
+}
 
 function calculdistance(x,y){
    return Math.sqrt(Math.pow((x-window.innerWidth/2),2)+Math.pow((y-window.innerHeight/2),2));

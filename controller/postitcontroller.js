@@ -10,13 +10,13 @@ var tabrr=new Array();
 var tabll=new Array();
 var tablb=new Array();
 var tabrb=new Array();
- /** fonction verifierLacollision
+/** fonction verifierLacollision
  * @debrif elle permet de vérifier s'il aura une collision ou pas sur des éléments déjà existant 
  * @param x la position sur l'axe des x 
  * @param y la position sur l'axe des y
  * @param tabx les positions déjà occupée par des post-it qui existe sur l'axe des x
  * @param taby  les position déjà occupée par des post-it qui existe sur l'axe des y
- */
+*/
 function verifierLacollision(x,y,tabx,taby){
     console.log(x,y,tabx,taby);
     for(let i=0;i<tabx.length;i++){
@@ -59,19 +59,36 @@ class Postit{
             post_it.axeX=getRandomIntInclusive(0,window.innerWidth-250);
             //post_it.axeY=getRandomIntInclusive(-window.innerHeight,window.innerHeight*3/2);
             post_it.axeY=getRandomIntInclusive(0,window.innerHeight-400);
-            post_it.axeX=post_it.axeY=0;
+            //post_it.axeX=post_it.axeY=0;
         }while(!(verifierLacollision(post_it.axeX,post_it.axeY,tabx,taby)));
         tabx.push(post_it.axeX);
         taby.push(post_it.axeY);
         elementFactory(post_it.id,post_it.type,post_it.text,post_it.axeX,post_it.axeY,post_it.couleur);
-        console.log("Heyyy",post_it.axeX,post_it.axeY);
         tableauderecuperation.push(createObject(id.toString(),post_it.axeX,post_it.axeY+250,calculdistance(post_it.axeX,post_it.axeY),mouseangle(convertoplanx(post_it.axeX),convertoplany(post_it.axeY))));
         console.log(tableauderecuperation);
         tableaudeposition=factoryposition(tableauderecuperation);
         console.log(tableaudeposition);
         decomposetabs(tableaudeposition,tabll,tabrr,tablb,tabrb);
-        
+    }
+    chargerPostit(coordoneesX,coordoneesY,text,couleur){
+        var post_it = {
+            id:(++id),
+            type:'div',
+            text:text,
+            axeX : coordoneesX,
+            axeY: coordoneesY,
+            couleur:couleur
+            
+        };
+        elementFactory(post_it.id,post_it.type,post_it.text,post_it.axeX,post_it.axeY,post_it.couleur);
 
+    }
+    enregistrerPostit(){
+        var element =document.querySelectorAll(".fill");
+        for(const s of element){
+            envoyerAuServeur(3,extractleft(s),extracttop(s),0,0,(s.innerHTML),(s.style.backgroundColor));
+
+        }
     }
     
 }
@@ -99,12 +116,13 @@ function dragEnd(){
 /** fonction dragOver()
  * @debrif quand l'evenement dragover se déclenche c'est à dira quand notre l'element séléctionner et sur la corbeille on affiche un message de suppression   
  */
+//TODO changement en fênetre si c'est possible ^_^
 function dragOver(e) {
     console.log("over");
-    var alerted = localStorage.getItem('alerted') || '';
+    var alerted = sessionStorage.getItem('alerted') || '';
     if (alerted != 'yes') {
-     alert("Element Will be Deleted !");
-     localStorage.setItem('alerted','yes');
+        alert("Element Will be Deleted !");
+        sessionStorage.setItem('alerted','yes');
     }
     e.preventDefault();
 }
@@ -132,12 +150,14 @@ function dragDrop() {
     document.body.removeChild(element);
     console.log(element);
     save.pop();
-    localStorage.removeItem('alerted');
+    sessionStorage.removeItem('alerted');
 }
 /** fonction deconnexion()
  * @debrif cette fonction permet la redirection vers la page d'acceuil et effacer le token du localstorage
  */
 function deconnexion(){
+    var newPost_it = new Postit();
+    newPost_it.enregistrerPostit();
     window.location = "/";
     localStorage.removeItem('token');
 
@@ -151,7 +171,6 @@ function boucleDeselectionDePostit(){
     for(const s of select){
         s.addEventListener("dragstart",dragStart);
         s.addEventListener("dragend",dragEnd);
-
     }
     requestAnimationFrame(boucleDeselectionDePostit);
 }
@@ -216,25 +235,64 @@ function target(e){
     
 }
 
-function centre(left,top){
-    var carre = document.createElement("div");
-    carre.style.backgroundColor="black";
-    carre.style.width = 10 + "px";
-    carre.style.height = 10 + "px";
-    carre.style.left = left + "px";
-    carre.style.borderRadius= "30px";
-    carre.style.top = top + "px";
-    carre.id="centre";
-    carre.style.position = "absolute";
-    document.body.appendChild(carre);
-    return carre;
- }
+
+/** Fonction recupererDuServeur()
+ * @debrif cette fonction permet de récuperer les post it déjà présent dans la base de données
+ * 
+ */
+ function recupererDuServeur() {		
+    var newPost_it=new Postit(); 
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", '/home.information', true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            var values = xhr.response;
+            console.log("xhr",xhr.response);
+            let obj = JSON.parse(values);
+            for(let i=0;i<obj.length;i++){
+                newPost_it.chargerPostit(obj[i].coordonneesX,obj[i].coordonneesY,obj[i].text,obj[i].couleur);
+            }            
+        }
+    }
+    xhr.send(null); 				
+}
+function envoyerAuServeur(iduser,coordonneesX,coordonneesY,distance,angleX,text,couleur){
+    var xhr=new XMLHttpRequest();
+    xhr.open("POST","/home.send",true);
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status ==200){
+            alert('xhr response ',xhr.response);
+        }
+    }
+   
+    var payLoad ="token="+JSON.parse(localStorage.getItem('token'))+"&"+"iduser="+ iduser+"&"+"coordonneesX="+coordonneesX+"&"+"coordonneesY="+coordonneesY+"&"+"distance="+distance+"&"+"angle="+angleX+"&"+"text="+text+"&"+"couleur="+couleur;    
+    xhr.send(payLoad);
+}
  
+function envoyerLeTokenAuServeur() {		
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", '/home.information', true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            var values = xhr.response;
+            console.log(values);
+        }
+}
+let token=localStorage.getItem('token');
+let payLoad='token='+JSON.parse(token);
+xhr.send(payLoad); 				
+
+}
+
 function main (){
-
+    envoyerLeTokenAuServeur();
+    recupererDuServeur();
+    centre();
     var newPost_it=new Postit();
-    //var element=elementFactory(1,'div',"Hello you can add post-it and also you can drop it into the trash",innerWidth/2,innerHeight/2,"red");
-
+    
     var buttonAjouter=document.getElementById('Ajouter');
     buttonAjouter.addEventListener("click",newPost_it.ajoutPostit);
 
@@ -247,9 +305,7 @@ function main (){
     buttonSupprimer.addEventListener('dragenter',dragEnter);
     buttonSupprimer.addEventListener('dragleave',dragLeave);
     buttonSupprimer.addEventListener('drop',dragDrop);
-    centre(window.innerWidth/2,window.innerHeight/2);
+   
     window.addEventListener("mousemove",target);
 
 }
-
-

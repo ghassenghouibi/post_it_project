@@ -3,11 +3,11 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        <title>Acceuil</title> 
+        <title>Accueil</title> 
         <link rel="stylesheet" href="../public/css/style.css">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="icon" href="../public/images/favicon.ico" />
-
+        <script src="../controller/controller.js"></script>
     </head>
     <body>
         <% include ./partials/header %>
@@ -16,20 +16,5 @@
                 <img src="../public/images/post_animation.gif" class="rounded" alt="picture" width="800" height="600">
         </div>
         <% include ./partials/footer %>
-        
-    
     </body>
-    <script>
-    if (localStorage.getItem("token") != null) {
-        let x=localStorage.getItem('token');
-        window.location = "/home";
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
-                alert("->>>>",xhr.responseText); // Données textuelles récupérées
-        }
-    };
-  
-    </script>
 </html>

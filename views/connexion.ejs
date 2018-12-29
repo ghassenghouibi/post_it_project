@@ -4,38 +4,78 @@
         <meta charset="utf-8">
         <title>Connexion</title> 
         <link rel="stylesheet" href="../public/css/style.css"> 
-        <link rel="stylesheet" href="../public/css/inscription.css">
+        <link rel="stylesheet" href="../public/css/form.css">
         <link rel="icon" href="../public/images/favicon.ico" />
+        <script src="../controller/controller.js"></script>
     </head>
     <body class="text-center">
         <% include ./partials/header %>
-        <% if(message.length > 0) { %>
-            <div class="alert alert-danger"><%= message %></div> 
-        <% } %>
-        <form action="/connexion" method="POST" class="form-signin" >
-                <div class="text-center">
-                        <img src="../public/images/post_it_logo.png" class="rounded" alt="picture" width="124" height="124">
+        <div id="champdeconnexion">
+            <div id="danger" class="alert alert-danger" style="display:none">Email ou mot de passe incorrect</div>    
+            <form class="form-signin" >
+                    <div class="text-center"><img src="../public/images/post_it_logo.png" class="rounded" alt="picture" width="124" height="124"></div>
+                    
+                    <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
+                    <label for="inputEmail" class="sr-only">Email</label><input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email" autocomplete="username email">
+                    <label for="inputPassword" class="sr-only">Mot de passe</label><input type="password" id="inputPassword" name="motdepasse" class="form-control" placeholder="Mot de passe" autocomplete="currentpassword"> 
+                    <a href="#" id="motdepasseclick">Mot de passe oublié ?</a>
+                    <button class="btn btn-lg btn-success btn-block" type="submit">Connexion</button>
+            </form>
+        </div>
+
+        <div id="tentative" style="display:none;">
+            <div class="alert alert-primary">Je pense que vous avez oubliez votre mot de passe ecrivez votre email d'inscription et cliquer sur le button envoyer et vous allez recevoir un lien de réninitialisation le plus rapidement possible</div>
+            <form action="/forgotpassword" method="POST" class="form-signin" >
+                <div class="input-group">
+                    <label for="inputEmail" class="sr-only">Email</label>
+                    <input type="email" id="recuperationEmail" name="Email" class="form-control" placeholder="Email" required autofocus>
+                    <button class="btn-info btn pull-right" type="submit">Envoyer</button>
                 </div>
-                
-                <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
-                <label for="inputEmail" class="sr-only">Email</label>
-                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email" required autofocus>
-                <label for="inputPassword" class="sr-only">Mot de passe</label>
-                <input type="password" id="inputPassword" name="motdepasse" class="form-control" placeholder="Mot de passe" required autocomplete="currentpassword"> 
-                <a href="/forgotpassword">Mot de passe oublié ?</a> </li>
-                <button class="btn btn-lg btn-success btn-block" type="submit">Connexion</button>
-        </form>
+            </form>
+        </div>
         <% include ./partials/footer %> 
     </body>
     <script>
-    if (localStorage.getItem("token") === null) {
-        console.log("hello")
-    }else{
-        console.log("catch it body");
-        //envoyer le token au serveur
-        let x=localStorage.getItem('token');
-        window.location = "/home";
-    }
-    
+        function changerlavue(){
+            let element=document.getElementById('champdeconnexion');
+            let tentative=document.getElementById('tentative');
+            element.style.display="none";
+            tentative.style.display="block";
+        }
+
+        let direction=document.getElementById('motdepasseclick');
+        direction.addEventListener('click',changerlavue);
+        var form=document.querySelector('form');
+        form.addEventListener('submit',loginUser);
+        //Nombre de tentative par rêquête
+        var nombredetentative=0;
+        function loginUser(event) {		
+            event.preventDefault();
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/connexion', true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                    var token = xhr.response;
+                    if(JSON.parse(token)=="Email ou mot de passe incorrect"){
+                        nombredetentative++;
+                        let danger=document.getElementById("danger");
+                        danger.style.display="block";
+                        form.reset();
+                        if(nombredetentative==3){
+                            changerlavue();
+                        }
+                    }
+                    else{
+                        localStorage.setItem('token', token);
+                        window.location="/home";
+                    }
+                }
+            }				
+        var email = document.getElementById('inputEmail').value;
+        var password = document.getElementById('inputPassword').value;
+        var payLoad = "email=" + email + "&" + "motdepasse=" + password; 
+        xhr.send(payLoad); 				
+        }
     </script>
 </html>
