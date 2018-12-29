@@ -90,6 +90,7 @@ class Postit{
 
         }
     }
+    //TODO Suppression de post-it
     
 }
 
@@ -146,8 +147,8 @@ function dragLeave() {
 function dragDrop() {
     console.log("dropped");
     let element=document.getElementById(save[0]);
-    //TODO Suppression de l'element du tableau
     document.body.removeChild(element);
+
     console.log(element);
     save.pop();
     sessionStorage.removeItem('alerted');

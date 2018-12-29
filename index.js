@@ -2,6 +2,7 @@ const express=require('express');
 const bodyParser=require('body-parser');
 const jwt=require('jsonwebtoken');
 const expressJwt=require('express-jwt');
+const nodemailer = require('nodemailer');
 const app=express();
 var urlencodedParser=bodyParser.urlencoded({extended:false});
 const DB=require('./model/utilisateur');
@@ -13,7 +14,7 @@ const secret='uajzosmehfncozuhtn359S62vefmpw82dL0oz6ozalsovefmpxnw8ozIZSds2dozfs
 app.use('/public',express.static('public'));
 app.use('/controller',express.static('controller'));
 //TODO Auth que si on a un token pour la page home
-//app.use(expressJwt({secret:secret}).unless({path:['/connexion','/inscription','/','/forgotpassword']}));
+//app.use(expressJwt({secret:secret}).unless({path:['/connexion','/inscription','/','/forgotpassword','/home']}));
 
 //On précise que nos views sont dans le dossier view et le view engine  c'est le format ejs
 app.set('views','./views');
@@ -27,7 +28,6 @@ app.get('/',function (req,res){
 //Connected page
 
 app.get('/home',function(req,res){
-    
     res.status(200).render('home');
 });
 
@@ -95,11 +95,52 @@ app.post('/inscription',urlencodedParser,function (req,res){
     });
 
 });
-
-//Forgot Password post
-
-app.post('/forgotpassword',function(req,res){
+//TODO access token {valid : 24 hours}
+app.post('/forgotpassword',urlencodedParser,function(req,res){
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user:'***********',
+            pass: '**********'
+        }
+    });
+    let mailOptions = {
+        from:     '***********',
+        to:       req.body.Email,
+        subject:  'Mot de passe Oublié',
+        html:     'Bonjour,\n'+
+                  '<p>Pas la peine de vous inquiéter. Vous pouvez réinitialiser votre mot de passe Post it:\n</p> '+
+                  `<p> en cliquant sur le lien ci-dessous  <a href="http://localhost:8080/password">Réinitialisation du mot de passe</a> </p> \n`+
+                  '<p>Si vous n\'avez pas demandé la réinitialisation de votre mot de passe, supprimez cet e-mail et continuez à poster on s\'occupe de la sécurité!</p>\n'+
+                  '<p>Cordialement L\'équipe de Post It '
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) console.log(error.message);
+        else console.log('Email',info.response);
+    });
     res.status(200).render('index');
+});
+
+
+
+//TODO modifier la route en route sécurisé
+app.get('/password',function(req,res){
+    res.status(200).render('password',{messagefail:''});
+});
+
+app.post('/password',urlencodedParser,function(req,res){
+    if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+        return res.render('password',{messagefail:'Cocher La case recaptcha S\'il vous plaît'});
+    }
+    else{
+        if(req.body.motdepasse1==req.body.motdepasse2){
+            dataBase.mettreAjourLecompteUtilisateur(req.body.email,req.body.motdepasse1);
+            return res.status(200).render('connexion');
+        }else{
+            return res.render('password',{messagefail:'Les deux mots de passe ne ressemble pas !'});
+        }
+    }
+     
 });
 
 app.get('/:id',function(req,res){

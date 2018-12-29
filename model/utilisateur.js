@@ -18,7 +18,7 @@ class Database{
     constructor(){ 
     }
     /** Fonction ajouterUnUtilisateurDansLaBaseDeDonnes(nom,prenom,email,motdepasse,done)
-    *brief cette fonction permet l'ajout d'un nouveau utilisateur dans la base de données à condition qu'il a pas déjà un compte 
+    *@debrif cette fonction permet l'ajout d'un nouveau utilisateur dans la base de données à condition qu'il a pas déjà un compte 
     *@param nom le nom renseigner de l'utilisateur
     *@param prenom le prenom renseigner par l'utilisateur
     *@param email l'email de l'utilisateur et ce dernier il peut pas exister 2 fois
@@ -44,6 +44,19 @@ class Database{
             }
         });
     }
+    /** Fonction mettreAjourLecompteUtilisateur 
+     * @debrif cette fonction permet de mettre à jour le mot de passe de l'utilisateur quand ce dernier l'oublie
+     * @param {*} email l'email de l'utilisateur
+     * @param {*} motdepasse  le nouveau mot de passe
+     */
+    mettreAjourLecompteUtilisateur(email,motdepasse){
+        let encrpytpassword=bcrypt.hashSync(motdepasse, null, null);
+        var update="UPDATE utilisateur SET motdepasse=? WHERE email=?";
+        connection.query(update,[encrpytpassword,email],function(err){
+            if(err) throw err;
+        });
+    }
+
     /**  fonction chercherLutilisateurDansLabaseDeDonnees(email,motdepasse,done)
     * brief cette fonction permet de rechercher si un utilisateur exsiste ou pas dans la basse de données
     * @param email l'email de l'utilisateur
@@ -121,7 +134,6 @@ class Database{
         });
     }
     mettreAjourLaBaseDeDonnees(idUtilisateur,coordonneesX,coordonneesY,distance,angleX,text,couleur,done){
-        //TODO conflit de données inserer deux fois !
         var search="SELECT * FROM post_it WHERE iduser=? AND coordonneesX=? AND coordonneesY=? AND distance=? AND angleX=? AND text=? AND couleur=?";
         connection.query(search, [idUtilisateur,coordonneesX,coordonneesY,distance,angleX,text,couleur],function(err,rows){
             if (err) throw err;
@@ -134,9 +146,9 @@ class Database{
                 });
             }
         });
-        
-        
     }
+   
+
     /**fonction renvoyerLesCoordonnees
      * @param idPostit c'est l'id du post_it
      * @param done ou on va reçevoir le resultat de la rêquete
