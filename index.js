@@ -3,69 +3,83 @@ const bodyParser=require('body-parser');
 const jwt=require('jsonwebtoken');
 const expressJwt=require('express-jwt');
 const nodemailer = require('nodemailer');
+const DB=require('./model/utilisateur');
 const app=express();
 var urlencodedParser=bodyParser.urlencoded({extended:false});
-const DB=require('./model/utilisateur');
-const dataBase=new DB();
 const PORT=8080;
+const dataBase=new DB();
+
 const secret='uajzosmehfncozuhtn359S62vefmpw82dL0oz6ozalsovefmpxnw8ozIZSds2dozfsfsfkzef';
 
-//Pour l'utilisateur des ficheirs statiques
+//Mail transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user:'***********',
+        pass: '**********'
+    }
+});
+
+//Les fichiers statiques
 app.use('/public',express.static('public'));
 app.use('/controller',express.static('controller'));
-//TODO Auth que si on a un token pour la page home
-//app.use(expressJwt({secret:secret}).unless({path:['/connexion','/inscription','/','/forgotpassword','/home']}));
 
 //On précise que nos views sont dans le dossier view et le view engine  c'est le format ejs
 app.set('views','./views');
 app.set('view engine','ejs');
 
+//TODO Auth que si on a un token pour la page home
+app.use(expressJwt({secret:secret}).unless({path:['/','/inscription','/connexion','/home']}));
 
-//La page d'acceuil
+
+
+/** Les rêquetes GET
+ *  @field '/' la page d'index 
+ *  @field '/connexion' la page de connexion
+ *  @field '/inscription' la page d'inscription
+ *  @field '/home.information' route pour chargement des post-it
+ *  @field '/password' la page de password
+*/
+
+//route d'index
 app.get('/',function (req,res){
-    res.status(200).render('index');
+   res.status(200).render('index');
 });
-//Connected page
-
+//route d'inscription
+app.get('/inscription',function (req,res){
+    res.status(200).render('inscription',{messagesuccess:'',messagefail:''});
+});
+//route de connexion
+app.get('/connexion',function (req,res){
+    res.status(200).render('connexion');    
+});
+//route home 
 app.get('/home',function(req,res){
     res.status(200).render('home');
 });
-
-
-
-//Information post & get pour charger les post-it à partir de la base de données
-var user="";
-app.post('/home.information',urlencodedParser,function(req,res){
-    jwt.verify(req.body.token,secret, function(err, decoded) {
-        user=decoded.user;
-    });
-});
-app.get('/home.information',urlencodedParser,function(req,res){
-    dataBase.chercherLidDeLutilisateur(user,function(id){
+//route d'information
+app.get('/home.information',function(req,res){
+    dataBase.chercherLidDeLutilisateur(req.user.user,function(id){
         dataBase.chargerLesPostitDeLaBaseDeDonnees(id,function(done){
             res.status(200).json(done);
         });
     });
 });
-
-app.post('/home.send',urlencodedParser,function(req,res){
-    jwt.verify(req.body.token,secret, function(err, decoded) {
-        if(err) throw err;
-        else{
-            dataBase.chercherLidDeLutilisateur(decoded.user,function(id){
-                dataBase.mettreAjourLaBaseDeDonnees(id,req.body.coordonneesX,req.body.coordonneesY,req.body.distance,req.body.angle,req.body.text,req.body.couleur,function(result){
-                    console.log("résultat de la rêquete",result);
-                    
-                });
-            });
-        }
-    });
-});
-//Connection post & get
-app.get('/connexion',function (req,res){
-    res.status(200).render('connexion');    
+//route de modification de mot de passe
+app.get('/password',function(req,res){
+    res.status(200).render('password',{messagefail:''});
 });
 
+/** Les rêquetes POST
+ *  @field '/connexion' route de connexion
+ *  @field '/inscription' route d'inscription
+ *  @field '/home.remove' route de suppression de post-it
+ *  @field '/home.send' route de mise à jour de la base de données
+ *  @field '/forgotpassword' route de mot de passe oublié
+ *  @field '/password' route de mise à jour de mot de passe
+*/
+
+//route de connexion envoie un token quand l'utilisateur est bien identifier
 app.post('/connexion',urlencodedParser,function(req,res){
     dataBase.chercherLutilisateurDansLabaseDeDonnees(req.body.email,req.body.motdepasse,function(result){
         if(result==0){
@@ -77,12 +91,7 @@ app.post('/connexion',urlencodedParser,function(req,res){
         }
     });   
 });
-
-//Inscription post & get
-app.get('/inscription',function (req,res){
-    res.render('inscription',{messagesuccess:'',messagefail:''});
-});
-
+//route d'inscription envoie un mail si tout c'est bien passé
 app.post('/inscription',urlencodedParser,function (req,res){
     dataBase.ajouterUnUtilisateurDansLaBaseDeDonnes(req.body.nom,req.body.prenom,req.body.email,req.body.motdepasse,function(result)
     {
@@ -90,22 +99,46 @@ app.post('/inscription',urlencodedParser,function (req,res){
             res.status(200).render('inscription',{messagefail:'l\'adresse email existe déjà',messagesuccess:''});
         }
         else{
+            let mailOptions = {
+                from:     'r2paris8@gmail.com',
+                to:       req.body.email,
+                subject:  'Inscription',
+                html:     `Bonjour ${req.body.nom}\n,`+
+                          '<p>Bienvenue parmis nous votre inscription est confirmé\n</p> '+
+                          `<p> N'oublié pas de poster vos idées chaque jour c'est important ! </p> \n`+
+                          '<p>Cordialement L\'équipe de Post It '
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) console.log(error.message);
+                else console.log('Email',info.response);
+            });
             res.status(200).render('inscription',{messagesuccess:'Votre inscription à était prise en compte',messagefail:''});
         }
     });
 
 });
-//TODO access token {valid : 24 hours}
-app.post('/forgotpassword',urlencodedParser,function(req,res){
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user:'***********',
-            pass: '**********'
-        }
+//route de supprresion de post-it
+app.post('/home.remove',urlencodedParser,function(req,res){
+    dataBase.chercherLidDeLutilisateur(req.user.user,function(id){
+        dataBase.SupprimerUnPostIt(id,req.body.coordonneesX,req.body.coordonneesY,function(result){
+            console.log("résultat de la rêquete Suppression",result);
+            res.status(200).json("Suppression Réussi");
+        });
     });
+});
+//route permet de mettre à jour la base de données 
+app.post('/home.send',urlencodedParser,function(req,res){
+    console.log(req.body);
+    dataBase.chercherLidDeLutilisateur(req.user.user,function(id){
+        dataBase.mettreAjourLaBaseDeDonnees(id,req.body.coordonneesX,req.body.coordonneesY,req.body.distance,req.body.angle,req.body.text,req.body.couleur,function(result){
+        console.log("résultat de la rêquete mettre à jour",result);
+        });
+    });
+});
+//route de mot de passe oublié
+app.post('/forgotpassword',urlencodedParser,function(req,res){
     let mailOptions = {
-        from:     '***********',
+        from:     'r2paris8@gmail.com',
         to:       req.body.Email,
         subject:  'Mot de passe Oublié',
         html:     'Bonjour,\n'+
@@ -120,14 +153,7 @@ app.post('/forgotpassword',urlencodedParser,function(req,res){
     });
     res.status(200).render('index');
 });
-
-
-
-//TODO modifier la route en route sécurisé
-app.get('/password',function(req,res){
-    res.status(200).render('password',{messagefail:''});
-});
-
+//route de mise à jour du mot de passe
 app.post('/password',urlencodedParser,function(req,res){
     if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
         return res.render('password',{messagefail:'Cocher La case recaptcha S\'il vous plaît'});
@@ -141,10 +167,6 @@ app.post('/password',urlencodedParser,function(req,res){
         }
     }
      
-});
-
-app.get('/:id',function(req,res){
-    res.status(404).render('index');
 });
 
 //Serveur à l'écoute

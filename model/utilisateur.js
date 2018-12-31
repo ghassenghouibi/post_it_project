@@ -10,8 +10,8 @@ var connection = mysql.createConnection({
   
 connection.connect();
 
-/*Class Database 
-*brief permet le controle de la base de données et comporte des méthodes qui vont permettre de manipuler la base de données
+/** Class Database 
+* @brief permet le controle de la base de données et comporte des méthodes qui vont permettre de manipuler la base de données
 */
 class Database{
 
@@ -56,7 +56,7 @@ class Database{
             if(err) throw err;
         });
     }
-
+    
     /**  fonction chercherLutilisateurDansLabaseDeDonnees(email,motdepasse,done)
     * brief cette fonction permet de rechercher si un utilisateur exsiste ou pas dans la basse de données
     * @param email l'email de l'utilisateur
@@ -101,6 +101,20 @@ class Database{
         
         var insertQuery = "INSERT INTO post_it (iduser,coordonneesX,coordonneesY,distance,angleX,text,couleur) values (?,?,?,?,?,?,?)";
         connection.query(insertQuery, [idUtilisateur,coordonneesX,coordonneesY,distance,angleX,text,couleur],function(err){
+            if (err) throw err;
+            else done(1);
+        });
+    }
+    /**
+     * 
+     * @param {*} idUtilisateur 
+     * @param {*} coordonneesX 
+     * @param {*} coordonneesY 
+     * @param {*} done 
+     */
+    SupprimerUnPostIt(idUtilisateur,coordonneesX,coordonneesY,done){
+        var supp ="DELETE FROM post_it WHERE iduser=? and coordonneesX=? and coordonneesY=?";
+        connection.query(supp, [idUtilisateur,coordonneesX,coordonneesY],function(err,rows){
             if (err) throw err;
             else done(1);
         });

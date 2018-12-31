@@ -19,7 +19,6 @@ function randomColor(){
     return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 }
 
-
 /** fonction elementFactory(text,attach,x,y,color)
 *brief la création des elements  
 * @param type le type d'element a créer
@@ -183,6 +182,23 @@ function centre(){
    return carre;
 }
 
+/** fonction verifierLacollision
+ * @debrif elle permet de vérifier s'il aura une collision ou pas sur des éléments déjà existant 
+ * @param x la position sur l'axe des x 
+ * @param y la position sur l'axe des y
+ * @param tabx les positions déjà occupée par des post-it qui existe sur l'axe des x
+ * @param taby  les position déjà occupée par des post-it qui existe sur l'axe des y
+*/
+function verifierLacollision(x,y,tabx,taby){
+   console.log(x,y,tabx,taby);
+   for(let i=0;i<tabx.length;i++){
+       if (tabx[i] < x +200 && tabx[i] + 200 > x && taby[i] < y + 250 && taby[i] +250 > y) {
+           return 0;
+       }
+   }
+   return 1;
+}
+
 function calculdistance(x,y){
    return Math.sqrt(Math.pow((x-window.innerWidth/2),2)+Math.pow((y-window.innerHeight/2),2));
 }
@@ -193,4 +209,34 @@ function extractleft(element){
 }
 function extracttop(element){
    return parseInt((element.style.top.split("px"))[0]);
+}
+
+
+
+function ButtonFactory(idbutton,classbutton,classspan,left,right,top,bottom){
+   var button=document.createElement("button");
+   var span=document.createElement('span');
+   span.className=classspan;
+   document.body.appendChild(button);
+   button.appendChild(span);
+   button.id=idbutton;
+   button.className=classbutton;
+   button.style.borderRadius="50%";
+   button.style.left=left+"px";
+   button.style.right=right+"px";
+   button.style.top=top+"px";
+   button.style.bottom=bottom+"px";
+   button.style.width=100+"px";
+   button.style.height=100+"px";
+   button.style.position="fixed";
+ 
+   return button;
+ 
+}
+
+
+function addListeners(element,evenement,fonction){
+
+   element.addEventListener(evenement, fonction);
+
 }
