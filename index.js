@@ -14,7 +14,8 @@ const secret='uajzosmehfncozuhtn359S62vefmpw82dL0oz6ozalsovefmpxnw8ozIZSds2dozfs
 app.use('/public',express.static('public'));
 app.use('/controller',express.static('controller'));
 //TODO Auth que si on a un token pour la page home
-//app.use(expressJwt({secret:secret}).unless({path:['/connexion','/inscription','/','/forgotpassword','/home']}));
+app.use(expressJwt({secret:secret}).unless({path:['/inscription','/connexion','/','/forgotpassword','/home']}));
+
 
 //On précise que nos views sont dans le dossier view et le view engine  c'est le format ejs
 app.set('views','./views');
@@ -23,15 +24,15 @@ app.set('view engine','ejs');
 
 //La page d'acceuil
 app.get('/',function (req,res){
-    res.status(200).render('index');
+    console.log(req.headers);
+    console.log("Direction");
+   return res.status(200).render('index');
 });
-//Connected page
 
 app.get('/home',function(req,res){
+    console.log(req.headers.authorization);
     res.status(200).render('home');
 });
-
-
 
 //Information post & get pour charger les post-it à partir de la base de données
 var user="";
@@ -48,14 +49,28 @@ app.get('/home.information',urlencodedParser,function(req,res){
     });
 });
 
-app.post('/home.send',urlencodedParser,function(req,res){
+app.post('/home.remove',urlencodedParser,function(req,res){
     jwt.verify(req.body.token,secret, function(err, decoded) {
         if(err) throw err;
         else{
             dataBase.chercherLidDeLutilisateur(decoded.user,function(id){
+                dataBase.SupprimerUnPostIt(id,req.body.coordonneesX,req.body.coordonneesY,function(result){
+                    console.log("résultat de la rêquete Suppression",result);
+                });
+            });
+        }
+    });
+});
+
+app.post('/home.send',urlencodedParser,function(req,res){
+    console.log(req.headers);
+    jwt.verify(req.body.token,secret, function(err, decoded) {
+        if(err) throw err;
+        else{
+            dataBase.chercherLidDeLutilisateur(decoded.user,function(id){
+                console.log("id ->" ,id);
                 dataBase.mettreAjourLaBaseDeDonnees(id,req.body.coordonneesX,req.body.coordonneesY,req.body.distance,req.body.angle,req.body.text,req.body.couleur,function(result){
-                    console.log("résultat de la rêquete",result);
-                    
+                    console.log("résultat de la rêquete mettre à jour",result);
                 });
             });
         }
@@ -82,7 +97,6 @@ app.post('/connexion',urlencodedParser,function(req,res){
 app.get('/inscription',function (req,res){
     res.render('inscription',{messagesuccess:'',messagefail:''});
 });
-
 app.post('/inscription',urlencodedParser,function (req,res){
     dataBase.ajouterUnUtilisateurDansLaBaseDeDonnes(req.body.nom,req.body.prenom,req.body.email,req.body.motdepasse,function(result)
     {
@@ -90,6 +104,26 @@ app.post('/inscription',urlencodedParser,function (req,res){
             res.status(200).render('inscription',{messagefail:'l\'adresse email existe déjà',messagesuccess:''});
         }
         else{
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user:'r2paris8@gmail.com',
+                    pass: 'motdepasse19'
+                }
+            });
+            let mailOptions = {
+                from:     'r2paris8@gmail.com',
+                to:       req.body.email,
+                subject:  'Inscription',
+                html:     `Bonjour ${req.body.nom}\n,`+
+                          '<p>Bienvenue parmis nous votre inscription est confirmé\n</p> '+
+                          `<p> N'oublié pas de poster vos idées chaque jour c'est important ! </p> \n`+
+                          '<p>Cordialement L\'équipe de Post It '
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) console.log(error.message);
+                else console.log('Email',info.response);
+            });
             res.status(200).render('inscription',{messagesuccess:'Votre inscription à était prise en compte',messagefail:''});
         }
     });
@@ -100,12 +134,12 @@ app.post('/forgotpassword',urlencodedParser,function(req,res){
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user:'***********',
-            pass: '**********'
+            user:'r2paris8@gmail.com',
+            pass: 'motdepasse19'
         }
     });
     let mailOptions = {
-        from:     '***********',
+        from:     'r2paris8@gmail.com',
         to:       req.body.Email,
         subject:  'Mot de passe Oublié',
         html:     'Bonjour,\n'+
