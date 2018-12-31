@@ -107,8 +107,8 @@ app.post('/inscription',urlencodedParser,function (req,res){
             let transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user:'r2paris8@gmail.com',
-                    pass: 'motdepasse19'
+                    user:'*************',
+                    pass: '************'
                 }
             });
             let mailOptions = {
@@ -134,8 +134,8 @@ app.post('/forgotpassword',urlencodedParser,function(req,res){
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user:'r2paris8@gmail.com',
-            pass: 'motdepasse19'
+            user:'************',
+            pass: '***********'
         }
     });
     let mailOptions = {
