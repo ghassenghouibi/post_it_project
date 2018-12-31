@@ -116,8 +116,7 @@ class Database{
         var supp ="DELETE FROM post_it WHERE iduser=? and coordonneesX=? and coordonneesY=?";
         connection.query(supp, [idUtilisateur,coordonneesX,coordonneesY],function(err,rows){
             if (err) throw err;
-            if(rows[0]) done(1);
-            else done(0);
+            else done(1);
         });
     }
     /**fonction chargerLesPostitDeLaBaseDeDonnees

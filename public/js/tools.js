@@ -19,7 +19,6 @@ function randomColor(){
     return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 }
 
-
 /** fonction elementFactory(text,attach,x,y,color)
 *brief la création des elements  
 * @param type le type d'element a créer

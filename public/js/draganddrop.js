@@ -5,7 +5,6 @@ var catchId=new Array();
 class DragAndDrop{
     constructor(){
     }
-    
     /** fonction dragStart()
      * @debrif quand l'evenement dragstart se déclenche cette fonction permet de récuperer l'id du post-it et rendre le post-it en question invisible
      */
@@ -19,7 +18,6 @@ class DragAndDrop{
      */
     dragEnd(){
         this.className= 'fill';
-
     }
     /** fonction dragOver()
      * @debrif quand l'evenement dragover se déclenche c'est à dira quand notre l'element séléctionner et sur la corbeille on affiche un message de suppression   
@@ -65,6 +63,7 @@ class DragAndDrop{
     }
 
 }
+//TODO modifier les valeur coordonnesX et coordoneesY
 /** Fonction suppressionDePosTit (coordonneesX,coordonneesY)
  * @debrif cette fonction permet de faire une rêquete au serveur pour supprimer un post-it il introduit aussi le token pour permettre l'identification de la personne
  * @param coordonneesX  coordonnéesX de post-it vu qu'un post-it peut avoir une seule position
@@ -75,11 +74,12 @@ function suppressionDePosTit(coordonneesX,coordonneesY){
     var xhr=new XMLHttpRequest();
     xhr.open("POST","/home.remove",true);
     xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader('Authorization', 'Bearer ' + JSON.parse(localStorage.getItem('token')));
     xhr.onreadystatechange=function(){
         if(xhr.readyState == XMLHttpRequest.DONE && xhr.status ==200){
-            alert('xhr response ',xhr.response);
+            console.log('xhr response ',xhr.response);
         }
     }  
-    var payLoad ="token="+JSON.parse(localStorage.getItem('token'))+"&"+"coordonneesX="+coordonneesX+"&"+"coordonneesY="+coordonneesY;    
+    var payLoad ="coordonneesX="+coordonneesX+"&"+"coordonneesY="+coordonneesY;    
     xhr.send(payLoad);
 }
