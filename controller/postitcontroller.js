@@ -27,21 +27,32 @@ class Postit{
      */
     ajoutPostit(){
         var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
-        console.log("Add a new Post it");
+        var t=prompt("Second :");
         var post_it = {
             id:(++id),
             type:'div',
             text:text,
-            axeX : getRandomIntInclusive(0,1500),
-            axeY: getRandomIntInclusive(0,500),
-            distance:0,
+            axeX : parseInt(text),
+            axeY: parseInt(t),
+            distance: 0,
             angleX:0,
             couleur:randomColor()
         };
-        
-        console.log("Distance ");
-        console.log("sur le repère orthonomée ",convertoplanx(960));
+        //-250,200
+        post_it.distance=calculdistance(post_it.axeX,post_it.axeY);
+        //100 et 125 la moité de la taille de post-it
+        var x=-convertoplanx(post_it.axeX+100);
+        var y=convertoplany(post_it.axeY+125);
+        console.log("Distance entre le point du mileu et le post-it  ",x,y,"Angle ",getAngleDeg(x,y));
+        post_it.angleX=Math.abs(getAngleDeg(x,y));
         elementFactory(post_it.id,post_it.type,post_it.text,post_it.axeX,post_it.axeY,post_it.couleur);
+        
+        tableauderecuperation.push(createObject(id.toString(),post_it.axeX,post_it.axeY,post_it.distance,post_it.angleX));
+        console.log(tableauderecuperation);
+        tableaudeposition=factoryposition(tableauderecuperation);
+        console.log(tableaudeposition);
+        decomposetabs(tableaudeposition,tabll,tabrr,tablb,tabrb);
+
         
     }
     
@@ -108,6 +119,40 @@ function chargerPostit(coordoneesX,coordoneesY,text,couleur){
     elementFactory(post_it.id,post_it.type,post_it.text,post_it.axeX,post_it.axeY,post_it.couleur);
 }    
 
+function target(e){
+    
+
+   
+    //TODO collision quand on bouge l'element
+    if(e.clientX<window.innerWidth/2 && e.clientY < window.innerHeight/2){
+       // console.log("==>",convertoplanx(e.clientX),convertoplany(e.clientY));
+       // console.log("client Angle ->",getAngleDeg(convertoplanx(e.clientX),convertoplany(e.clientY)));        
+       // console.log("LL");
+        for(var ii=0;ii<tabll.length;ii++){
+            if(Math.round(tabll[ii].degree)==Math.round( getAngleDeg(convertoplanx(e.clientX),convertoplany(e.clientY))) ){
+                console.log("LL ANGLE WOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUUHHHHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                //TODO bouger !!
+            }
+        }
+    }
+    else if(e.clientX<window.innerWidth/2 && e.clientY > window.innerHeight/2){
+        //console.log(direction(convertoplanx(e.clientX),convertoplany(e.clientY)));
+      //  console.log("client Angle ->",getAngleDeg(convertoplanx(e.clientX),convertoplany(e.clientY)));        
+      //  console.log("LB");
+    }
+    else if(e.clientX>window.innerWidth/2 && e.clientY>window.innerHeight/2){
+        //console.log(direction(convertoplanx(e.clientX),convertoplany(e.clientY)));
+        console.log("client Angle ->",getAngleDeg(convertoplanx(e.clientX),convertoplany(e.clientY)));        
+        console.log("RB");
+    }
+    else{
+        //console.log(direction(convertoplanx(e.clientX),convertoplany(e.clientY)));
+        console.log("client Angle ->",getAngleDeg(convertoplanx(e.clientX),convertoplany(e.clientY)));     
+        console.log("RR");
+        
+     //console.log("degree ",mouseangle(axeX,axeY));      
+    }
+}
 function main (){
     recupererDuServeur();
     var supprimer=new BS("Supprimer","btn btn-danger","glyphicon glyphicon-trash",0,undefined,undefined,0);
@@ -116,8 +161,8 @@ function main (){
 
     centre();
     boucleDeselectionDePostit();
+    
 
-
-    //window.addEventListener("mousemove",target);
+    window.addEventListener("mousemove",target);
 
 }

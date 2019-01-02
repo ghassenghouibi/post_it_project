@@ -40,7 +40,7 @@ function elementFactory(id,type,text,x,y,color){
    element.style.font='x-large arial, sans-serif';
    element.style.wordWrap='break-word';
    element.style.position='relative';
-   if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
+   if(y > window.innerHeight-250 || x >window.innerWidth-200){
       element.style.display='none';
    }
    element.style.WebkitBorderBottomRightRadius="500px 20px";
@@ -92,10 +92,10 @@ function getAngleDeg(x,y) {
  
  
 function convertoplanx(x){
-   return Math.abs((window.innerWidth/2-x));
+   return Math.abs((x-window.innerWidth/2));
 }
 function convertoplany(y){
-   return Math.abs((window.innerHeight/2-y));
+   return Math.abs((y-window.innerHeight/2));
 }
  
 /** Fonction mouseangle
@@ -104,7 +104,7 @@ function convertoplany(y){
  * @param y position y
  */
 function mouseangle(x,y){
-    return getAngleDeg(Math.abs(x),pythagore(x,y)); 
+    return getAngleDeg(Math.abs(x),Math.abs(y)); 
  }
 function createObject(id,posx,posy,distance,degree){
 
@@ -147,15 +147,15 @@ function decomposetabs(tab,tabll,tabrr,tablb,tabrb){
             tabll.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
             break;
          case "rr":
-            //console.log(tab[i]);
+            console.log(tab[i]);
             tabrr.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
             break;
          case "lb":
-            //console.log(tab[i]);
+            console.log(tab[i]);
             tablb.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
             break;
          case "rb":
-            //console.log(tab[i]);
+            console.log(tab[i]);
             tabrb.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
             break;
          default:
@@ -171,9 +171,9 @@ function centre(){
    carre.style.backgroundColor="black";
    carre.style.width = 10 + "px";
    carre.style.height = 10 + "px";
-   carre.style.left = window.innerWidth/2 + "px";
-   carre.style.borderRadius= "30px";
-   carre.style.top = window.innerHeight/2 + "px";
+   carre.style.left = window.innerWidth/2 -5 + "px";
+   carre.style.borderRadius= "60px";
+   carre.style.top = window.innerHeight/2 -5 + "px";
    carre.id="centre";
    carre.style.position = "absolute";
    document.body.appendChild(carre);
