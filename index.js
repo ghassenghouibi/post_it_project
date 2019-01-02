@@ -15,8 +15,8 @@ const secret='uajzosmehfncozuhtn359S62vefmpw82dL0oz6ozalsovefmpxnw8ozIZSds2dozfs
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user:'r2paris8@gmail.com',
-        pass: 'motdepasse19'
+        user:'***********',
+        pass: '**********'
     }
 });
 
@@ -75,6 +75,7 @@ app.get('/password',function(req,res){
  *  @field '/inscription' route d'inscription
  *  @field '/home.remove' route de suppression de post-it
  *  @field '/home.send' route de mise à jour de la base de données
+ *  @field '/home.modification route de modification du contenu de post-it
  *  @field '/forgotpassword' route de mot de passe oublié
  *  @field '/password' route de mise à jour de mot de passe
 */
@@ -132,6 +133,14 @@ app.post('/home.send',urlencodedParser,function(req,res){
     dataBase.chercherLidDeLutilisateur(req.user.user,function(id){
         dataBase.mettreAjourLaBaseDeDonnees(id,req.body.coordonneesX,req.body.coordonneesY,req.body.distance,req.body.angle,req.body.text,req.body.couleur,function(result){
         console.log("résultat de la rêquete mettre à jour",result);
+        });
+    });
+});
+//route permet la modification du contenu de post-it
+app.post('/home.modification',urlencodedParser,function(req,res){
+    dataBase.chercherLidDeLutilisateur(req.user.user,function(id){
+        dataBase.mettreAjourText(id,req.body.text,req.body.coordonneesX,req.body.coordonneesY,function(result){
+            console.log("résultat du text -> ",result);
         });
     });
 });
