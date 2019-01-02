@@ -11,7 +11,6 @@ class Events{
     constructor(){}
     
     controletoken(){
-        //TODO le temps entre la redirection et le chargement
         //TODO vérification de la signature du token
         if (localStorage.getItem("token") != null && window.location!="/home") window.location="/home";
     }
@@ -19,13 +18,9 @@ class Events{
 
 function main(){
     //Token
-    //let controle=new Events();
-    //controle.controletoken();
-
-    
-
+    let controle=new Events();
+    controle.controletoken();
 }
-
 
 function target(e){
     var axeX=Math.abs((window.innerWidth/2-e.clientX));

@@ -30,8 +30,6 @@ function randomColor(){
 */
 function elementFactory(id,type,text,x,y,color){
    var element=document.createElement(type);
-   //var canvas=document.getElementById('post-it');
-   //canvas.appendChild(element);
    document.body.appendChild(element);
    element.innerHTML=text;
    element.id=id;

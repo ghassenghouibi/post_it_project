@@ -9,6 +9,7 @@ class DragAndDrop{
      * @debrif quand l'evenement dragstart se déclenche cette fonction permet de récuperer l'id du post-it et rendre le post-it en question invisible
      */
     dragStart(){
+        console.log("STYAAAAAAARY");
         catchId.push(this.id);
         this.className += ' hold';
         setTimeout(()=> (this.className ='invisible'),0);
@@ -55,6 +56,16 @@ class DragAndDrop{
         catchId.pop();
         sessionStorage.removeItem('alerted');
     }
+    /**
+     * 
+     */
+    //TODO modification dans la base de données
+    clicked(){
+        var text=prompt("Ecrivez quelques chose");
+        this.innerHTML=text;
+        modificationDePostit(extractleft(this),extracttop(this),text);
+
+    }
     /** fonction rappel()
      * @debrif quand l'evenement click se déclenche cette fonction fait un alert à l'utilisateur de supprimer
     */
@@ -81,5 +92,18 @@ function suppressionDePosTit(coordonneesX,coordonneesY){
         }
     }  
     var payLoad ="coordonneesX="+coordonneesX+"&"+"coordonneesY="+coordonneesY;    
+    xhr.send(payLoad);
+}
+function modificationDePostit(coordonneesX,coordonneesY,text){
+    var xhr=new XMLHttpRequest();
+    xhr.open("POST","/home.modification",true);
+    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader('Authorization','Bearer ' + JSON.parse(localStorage.getItem('token')));
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState==XMLHttpRequest.DONE && xhr.status ==200){
+            console.log("xhr response ",xhr.response);
+        }
+    }
+    var payLoad="text="+text+"&" + "coordonneesX=" +coordonneesX + "&"+"coordonneesY="+coordonneesY;
     xhr.send(payLoad);
 }

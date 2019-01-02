@@ -8,7 +8,6 @@
         <link rel="icon" href="../public/images/favicon.ico" />
         <script src="../controller/screencontroller.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
     </head>
     <body class="text-center">
         <% include ./partials/header %>
@@ -24,10 +23,9 @@
                     <button class="btn btn-lg btn-success btn-block" type="submit">Connexion</button>
             </form>
         </div>
-
         <div id="tentative" style="display:none;">
             <div class="alert alert-primary">Je pense que vous avez oubliez votre mot de passe ecrivez votre email d'inscription et cliquer sur le button envoyer et vous allez recevoir un lien de réninitialisation le plus rapidement possible</div>
-            <form action="/forgotpassword" method="POST" class="form-signin" >
+            <form action="/" method="GET" class="form-signin" >
                 <div class="input-group">
                     <label for="inputEmail" class="sr-only">Email</label>
                     <input type="email" id="recuperationEmail" name="Email" class="form-control" placeholder="Email" required autofocus>
@@ -39,12 +37,6 @@
     </body>
     <script>
         function changerlavue(){
-            let element=document.getElementById('champdeconnexion');
-            let tentative=document.getElementById('tentative');
-            element.style.display="none";
-            tentative.style.display="block";
-        }
-        function Changerlavue(){
             let element=document.getElementById('champdeconnexion');
             let tentative=document.getElementById('tentative');
             element.style.display="none";
@@ -63,9 +55,8 @@
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function() {
                 if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-                    var token = xhr.response;
-                    localStorage.setItem('token', token);
-                    if(JSON.parse(token)!="Email ou mot de passe incorrect"){
+                    if(JSON.parse(xhr.response)!="Email ou mot de passe incorrect"){
+                        localStorage.setItem('token', xhr.response);
                         window.location.href="/home";
                     }
                     else{
@@ -73,11 +64,7 @@
                         let danger=document.getElementById("danger");
                         danger.style.display="block";
                         form.reset();
-                        if(nombredetentative==3){
-                            changerlavue();
-                        }
-
-
+                        if(nombredetentative==3) changerlavue();
                     }
                 }
             }				
@@ -86,7 +73,5 @@
         var payLoad = "email=" + email + "&" + "motdepasse=" + password; 
         xhr.send(payLoad); 				
         }
-    
-    
     </script>
 </html>

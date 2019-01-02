@@ -31,32 +31,18 @@ class Postit{
         var post_it = {
             id:(++id),
             type:'div',
-            text:"text",
-            axeX : 0,
-            axeY: 0,
+            text:text,
+            axeX : getRandomIntInclusive(0,1500),
+            axeY: getRandomIntInclusive(0,500),
             distance:0,
             angleX:0,
             couleur:randomColor()
         };
-        post_it.distance=calculdistance(post_it.axeX,post_it.axeY);
-
-        console.log("xplan-> ",window.innerWidth/2,"yplan",window.innerHeight/2);
-        console.log("x-> ",convertoplanx(post_it.axeX),"y->",convertoplany(post_it.axeY));
-        let ps=produitscalaire(convertoplanx(post_it.axeX),convertoplany(post_it.axeY),window.innerWidth/2,window.innerHeight/2);
-        console.log("le produit scalaire -> ",ps);
-        let tt1=longeurduvecteur(convertoplany(post_it.axeX),convertoplany(post_it.axeY));
-        let tt2=longeurduvecteur(window.innerWidth/2,window.innerHeight/2);
-        console.log("-> ",tt1*tt2);
-        console.log("calcul angle -> ",calcAngle(ps/(tt1*tt2)));
-        //post_it.angleX=mouseangle(post_it.distance,window.innerHeight/2);
-        console.log(post_it);
-
-        elementFactory(post_it.id,post_it.type,post_it.text,post_it.axeX,convertoplany(post_it.axeY),post_it.couleur);
-        //tableauderecuperation.push(createObject(id.toString(),post_it.axeX,convertoplany(post_it.axeY)+250,calculdistance(post_it.axeX,convertoplany(post_it.axeY)),mouseangle(convertoplanx(post_it.axeX),convertoplany(convertoplany(post_it.axeY)))));
-        //console.log(tableauderecuperation);
-        //tableaudeposition=factoryposition(tableauderecuperation);
-        //console.log(tableaudeposition);
-        //decomposetabs(tableaudeposition,tabll,tabrr,tablb,tabrb);
+        
+        console.log("Distance ");
+        console.log("sur le repère orthonomée ",convertoplanx(960));
+        elementFactory(post_it.id,post_it.type,post_it.text,post_it.axeX,post_it.axeY,post_it.couleur);
+        
     }
     
     
@@ -82,9 +68,11 @@ function boucleDeselectionDePostit(){
     for(const s of select){
         s.addEventListener("dragstart",newDragAndDrop.dragStart);
         s.addEventListener("dragend",newDragAndDrop.dragEnd);
+        s.addEventListener("click",newDragAndDrop.clicked);
     }
     requestAnimationFrame(boucleDeselectionDePostit);
 }
+
 
 /** Fonction recupererDuServeur()
      * @debrif cette fonction permet de récuperer les post it déjà présent dans la base de données

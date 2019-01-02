@@ -162,7 +162,14 @@ class Database{
         });
     }
    
-
+    mettreAjourText(idUtilisateur,text,coordonneesX,coordonneesY,done){
+        //update tbt set flags=eee
+        var update="UPDATE post_it SET text=? WHERE iduser=? AND coordonneesX=? AND coordonneesY=?";
+        connection.query(update,[text,idUtilisateur,coordonneesX,coordonneesY],function(err){
+            if (err) throw err;
+            else done(1);
+        });
+    }
     /**fonction renvoyerLesCoordonnees
      * @param idPostit c'est l'id du post_it
      * @param done ou on va reçevoir le resultat de la rêquete
