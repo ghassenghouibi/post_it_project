@@ -39,8 +39,8 @@ function elementFactory(id,type,text,x,y,color){
    element.style.textAlign='center';
    element.style.font='x-large arial, sans-serif';
    element.style.wordWrap='break-word';
-   element.style.position='relative';
-   if(y > window.innerHeight-250 || x >window.innerWidth-200){
+   element.style.position='absolute';
+   if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
       element.style.display='none';
    }
    element.style.WebkitBorderBottomRightRadius="500px 20px";
@@ -113,56 +113,13 @@ function createObject(id,posx,posy,distance,degree){
       posx:posx,
       posy:posy,
       distance:distance,
-      degree:degree
+      degree:degree,
+      position:getdirection(posx,posy)
    };
 
    return objet; 
 }
 
-function factoryposition(tab){
-   var newtab=new Array();
-   for(let i=0;i<tab.length;i++){
-
-      var objet={
-         id:tab[i].id,
-         posx:tab[i].posx,
-         posy:tab[i].posy,
-         distance:tab[i].distance,
-         degree:tab[i].degree,
-         position:getdirection(tab[i].posx,tab[i].posy)
-
-      };
-      newtab.push(objet);
-   }
-   return newtab;
-}
-
-
-function decomposetabs(tab,tabll,tabrr,tablb,tabrb){
-   
-   for(var i=0;i<tab.length;i++){
-      console.log("Position ",tab[i].position);
-      switch(tab[i].position){
-         case "ll":
-            tabll.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
-            break;
-         case "rr":
-            console.log(tab[i]);
-            tabrr.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
-            break;
-         case "lb":
-            console.log(tab[i]);
-            tablb.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
-            break;
-         case "rb":
-            console.log(tab[i]);
-            tabrb.push(createObject(tab[i].id,tab[i].posx,tab[i].posy,tab[i].distance,tab[i].degree));
-            break;
-         default:
-            console.log("I can't decompose that "); 
-      }
-   }
-}
 /** Fonction centre()
  * @debrif Fonction de création d'un petit point noir au milieu de l'ecran pour mieux se reperer
  */
@@ -181,16 +138,14 @@ function centre(){
 }
 
 /** fonction verifierLacollision
- * @debrif elle permet de vérifier s'il aura une collision ou pas sur des éléments déjà existant 
- * @param x la position sur l'axe des x 
- * @param y la position sur l'axe des y
- * @param tabx les positions déjà occupée par des post-it qui existe sur l'axe des x
- * @param taby  les position déjà occupée par des post-it qui existe sur l'axe des y
+* @debrif elle permet de vérifier s'il aura une collision ou pas sur des éléments déjà existant 
+* @param x la position sur l'axe des x 
+* @param y la position sur l'axe des y
+* @param tab les positions déjà occupée par des post-it qui existe 
 */
-function verifierLacollision(x,y,tabx,taby){
-   console.log(x,y,tabx,taby);
-   for(let i=0;i<tabx.length;i++){
-       if (tabx[i] < x +200 && tabx[i] + 200 > x && taby[i] < y + 250 && taby[i] +250 > y) {
+function verifierLacollision(x,y,tab){
+   for(let i=0;i<tab.length;i++){
+       if (tab[i].posx < x +200 && tab[i].posx + 200 > x && tab[i].posy < y + 250 && tab[i].posy +250 > y) {
            return 0;
        }
    }

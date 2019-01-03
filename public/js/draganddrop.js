@@ -9,7 +9,6 @@ class DragAndDrop{
      * @debrif quand l'evenement dragstart se déclenche cette fonction permet de récuperer l'id du post-it et rendre le post-it en question invisible
      */
     dragStart(){
-        console.log("STYAAAAAAARY");
         catchId.push(this.id);
         this.className += ' hold';
         setTimeout(()=> (this.className ='invisible'),0);
@@ -23,7 +22,6 @@ class DragAndDrop{
     /** fonction dragOver()
      * @debrif quand l'evenement dragover se déclenche c'est à dira quand notre l'element séléctionner et sur la corbeille on affiche un message de suppression   
      */
-    //TODO changement en fênetre si c'est possible ^_^
     dragOver(e) {
         var alerted = sessionStorage.getItem('alerted') || '';
         if (alerted != 'yes') {
@@ -59,7 +57,6 @@ class DragAndDrop{
     /**
      * 
      */
-    //TODO modification dans la base de données
     clicked(){
         var text=prompt("Ecrivez quelques chose");
         this.innerHTML=text;
@@ -74,7 +71,7 @@ class DragAndDrop{
     }
 
 }
-//TODO modifier les valeur coordonnesX et coordoneesY
+//TODO rajouter Les coordonéées X,Y
 /** Fonction suppressionDePosTit (coordonneesX,coordonneesY)
  * @debrif cette fonction permet de faire une rêquete au serveur pour supprimer un post-it il introduit aussi le token pour permettre l'identification de la personne
  * @param coordonneesX  coordonnéesX de post-it vu qu'un post-it peut avoir une seule position

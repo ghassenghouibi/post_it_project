@@ -5,7 +5,7 @@ const expressJwt=require('express-jwt');
 const nodemailer = require('nodemailer');
 const DB=require('./model/utilisateur');
 const app=express();
-var urlencodedParser=bodyParser.urlencoded({extended:false});
+var   urlencodedParser=bodyParser.urlencoded({extended:false});
 const PORT=8080;
 const dataBase=new DB();
 
