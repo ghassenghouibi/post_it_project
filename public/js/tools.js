@@ -1,111 +1,19 @@
-/**fonction getRandomInInclusive(min,max)
-/* brief fonction qui permet de retouner une valeur compris entre min et max y compris
-* @param min valeur min
-* @param max valeur max
-* @return une valeur comprise entre les valeurs min et max
+/** Fonction pythagore(x,y)
+* @debrif cette fonction permet de calculer le côte d'un triangle rectangle qui applique le théorme de pythagore
+* @param x le côte x du triangle
+* @param y le côte y du triangle
 */
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min +1)) + min;
-}
-
-
-/** fonction randomColor
- * brief permet de générer une couleur aléatoire
- * @return la couleur
- */
-function randomColor(){
-    return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-}
-
-/** fonction elementFactory(text,attach,x,y,color)
-*brief la création des elements  
-* @param type le type d'element a créer
-* @param text le text a inserer
-* @param x coordonnées sur l'axe x
-* @param y coordonnées sur l'axe y
-* @param color la couleur
-* @return un element 
-*/
-function elementFactory(id,type,text,x,y,color){
-   var element=document.createElement(type);
-   document.body.appendChild(element);
-   element.innerHTML=text;
-   element.id=id;
-   element.className="fill"
-   element.draggable="true";
-   element.style.cursor='move';
-   element.style.textAlign='center';
-   element.style.font='x-large arial, sans-serif';
-   element.style.wordWrap='break-word';
-   element.style.position='absolute';
-   if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
-      element.style.display='none';
-   }
-   element.style.WebkitBorderBottomRightRadius="500px 20px";
-   element.style.BoxShadow='10px 10px 5px #656565';
-   element.style.left=x+"px";
-   element.style.top=y+"px";
-   element.style.width=200+"px";
-   element.style.height=250+"px";
-   element.style.backgroundColor=color;
-
-   return element;
-}
-
-/** Fonction pythagore
- * @debrif cette fonction permet de calculer le côte d'un triangle rectangle qui applique le théorme de pythagore
- * @param x le côte x du triangle
- * @param y le côte y du triangle
- */
 function pythagore(x,y){
-    return Math.round(Math.sqrt(Math.pow(x,2)+Math.pow(y,2)));
- }
-/** Fonction getdirection
- * @debrif cette fonction permet de renvoyer la position sur un repère  rr signifie right right ll left left rb right bottom lb left bottom
- * @param x la valeur du point x 
- * @param y la valeur du point y
- */ 
-function getdirection(x,y){
-    if(x>(window.innerWidth/2) && y<(window.innerHeight/2))
-       return "rr";
-    else if(x<(window.innerWidth/2) && y<(window.innerHeight/2))
-       return "ll";
-    else if(x>(window.innerWidth/2) && y>(window.innerHeight/2))
-       return "rb";
-    else
-       return "lb";
- }
- 
-/** Fonction angleDegree
-  * @debrif cette fonction nous renvoie l'angle (dans un triangle rectangle )
-  * @param x valeur de cote x 
-  * @param y valeur de cote y
-  *   */
-function getAngleDeg(x,y) {
-   var angleRad = Math.atan(y/x);
-   var angleDeg = angleRad * 180 / Math.PI;
-   
-   return(angleDeg);
+    return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 }
- 
- 
-function convertoplanx(x){
-   return Math.abs((x-window.innerWidth/2));
-}
-function convertoplany(y){
-   return Math.abs((y-window.innerHeight/2));
-}
- 
-/** Fonction mouseangle
- * @debrif cette fonction renvoie l'angle de la souris par rapport à l'origine
- * @param x position x 
- * @param y position y
- */
-function mouseangle(x,y){
-    return getAngleDeg(Math.abs(x),Math.abs(y)); 
- }
+/** Fonction creaObject(id,posx,posy,distance,degree)
+* @debrif cette fonction permet de creer un objet à partir des informations suivantes
+* @param id l'id 
+* @param posx position sur l'axe x
+* @param posy position sur l'axe y
+* @param distance la distance par rapport à l'origine
+* @param degree  le degree par rapport à l'origine
+*/
 function createObject(id,posx,posy,distance,degree){
 
    var objet={
@@ -120,19 +28,58 @@ function createObject(id,posx,posy,distance,degree){
    return objet; 
 }
 
-/** Fonction centre()
- * @debrif Fonction de création d'un petit point noir au milieu de l'ecran pour mieux se reperer
- */
-function centre(){
+/** Fonction mouseangle
+* @debrif cette fonction renvoie l'angle de la souris par rapport à l'origine
+* @param x position x 
+* @param y position y
+*/
+function mouseangle(x,y){
+   return getAngleDeg(Math.abs(x),Math.abs(y)); 
+}
+
+/** Fonction angleDegree
+* @debrif cette fonction nous renvoie l'angle entre deux segment
+* @param x valeur de cote x 
+* @param y valeur de cote y
+*/
+function getAngleDeg(x,y) {
+   var angleRad = Math.atan(y/x);
+   var angleDeg = angleRad * 180 / Math.PI;
+   
+   return(angleDeg);
+}
+
+/** fonction convertoplanx
+* @debrif cette fonction permet de convertir des coordonnées clientX en coordonnées d'un répère orthonomé
+* @param y coordonnées sur l'axe x
+*/
+function convertoplanx(x){
+   return Math.abs((x-window.innerWidth/2));
+}
+/** fonction convertoplany
+* @debrif cette fonction permet de convertir des coordonnées clientY en coordonnées d'un répère orthonomé
+* @param y coordonnées sur l'axe y
+*/
+function convertoplany(y){
+   return Math.abs((y-window.innerHeight/2));
+}
+ 
+/** Fonction blob()
+* @debrif Fonction de création d'un petit suiveur du curseur de la souris et quand il bouge pas il sert à se repèrer
+* @param x coordonnées sur l'axe x
+* @param y coordonnées sur l'axe y
+* @param id l'id de l'element
+*/
+function blob(x,y,id){
    var carre = document.createElement("div");
    carre.style.backgroundColor="black";
-   carre.style.width = 10 + "px";
-   carre.style.height = 10 + "px";
-   carre.style.left = window.innerWidth/2 -5 + "px";
-   carre.style.borderRadius= "60px";
-   carre.style.top = window.innerHeight/2 -5 + "px";
-   carre.id="centre";
-   carre.style.position = "absolute";
+   carre.style.width = 50 + "px";
+   carre.style.height = 50 + "px";
+   carre.style.left = x + "px";
+   carre.style.borderRadius= "30px";
+   carre.style.top = y + "px";
+   carre.id=id;
+   carre.style.position = "fixed";
    document.body.appendChild(carre);
    return carre;
 }
@@ -152,20 +99,58 @@ function verifierLacollision(x,y,tab){
    return 1;
 }
 
+/** fonction calculdistance(x,y)
+* @debrif cette fonction permet de faire le calcul de la distance entre un point x et y et le centre de l'ecran
+* @param x position sur l'axe x 
+* @param y position sur l'axe y
+*/
 function calculdistance(x,y){
    return Math.sqrt(Math.pow((x-window.innerWidth/2),2)+Math.pow((y-window.innerHeight/2),2));
 }
 
-
+/** fonction extractleft(element)
+* @debrif cette fonction permet de renvoyer la position left en int
+* @param element l'element à extraire
+*/
 function extractleft(element){
    return parseInt((element.style.left.split("px"))[0]);
 }
+
+/** fonction extracttop(element)
+* @debrif cette fonction permet de renvoyer la position top en int
+* @param element l'element à extraire
+*/
 function extracttop(element){
    return parseInt((element.style.top.split("px"))[0]);
 }
 
+/** Fonction getdirection
+* @debrif cette fonction permet de renvoyer la position sur un repère  rr signifie right right ll left left rb right bottom lb left bottom
+* par rapport à l'origine 
+* @param x la valeur du point x 
+* @param y la valeur du point y
+*/ 
+function getdirection(x,y){
+   if(x>(window.innerWidth/2) && y<(window.innerHeight/2))
+      return "rr";
+   else if(x<(window.innerWidth/2) && y<(window.innerHeight/2))
+      return "ll";
+   else if(x>(window.innerWidth/2) && y>(window.innerHeight/2))
+      return "rb";
+   else
+      return "lb";
+}
 
-
+/** fonction ButtonFactory(idbutton,classbutton,classspan,left,right,top,bottom)
+* @debrif cette fonction permet de créér des buttons et ajouter des span dedans
+* @param idbutton id de l'element
+* @param classbutton  la classe du button
+* @param classspan le span
+* @param left position left
+* @param right position right
+* @param top  position top
+* @param bottom position bottom
+*/
 function ButtonFactory(idbutton,classbutton,classspan,left,right,top,bottom){
    var button=document.createElement("button");
    var span=document.createElement('span');
@@ -187,9 +172,69 @@ function ButtonFactory(idbutton,classbutton,classspan,left,right,top,bottom){
  
 }
 
-
+/** fonction addListeners(element,evenement,fonction)
+* @debrif cette fonction permet d'ecouter des évenements elle prend en paramètre l'element 
+* et l'evenement ("mouseonmove","click",..etc) fonction à exécuter quand l'événement se déclenche
+* @param element l'élément   
+* @param evenement l'événement déclencher
+* @param fonction  la fonction à exécuter
+*/
 function addListeners(element,evenement,fonction){
 
    element.addEventListener(evenement, fonction);
 
+}
+/** fonction elementFactory(text,attach,x,y,color)
+* @debrif permet la création des elements (post-it en particuler) 
+* @param type le type d'element a créer
+* @param text le text a inserer
+* @param x coordonnées sur l'axe x
+* @param y coordonnées sur l'axe y
+* @param color la couleur
+* @return un element 
+*/
+function elementFactory(id,type,text,x,y,color){
+   var element=document.createElement(type);
+   document.body.appendChild(element);
+   element.innerHTML=text;
+   element.id=id;
+   element.className="fill"
+   element.draggable="true";
+   element.style.cursor='move';
+   element.style.textAlign='center';
+   element.style.font='x-large arial, sans-serif';
+   element.style.wordWrap='break-word';
+   element.style.position='absolute';
+   //if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
+   //   element.style.display='none';
+   //}
+   element.style.WebkitBorderBottomRightRadius="500px 20px";
+   element.style.BoxShadow='10px 10px 5px #656565';
+   element.style.left=x+"px";
+   element.style.top=y+"px";
+   element.style.width=200+"px";
+   element.style.height=250+"px";
+   element.style.backgroundColor=color;
+
+   return element;
+}
+
+/** fonction getRandomInInclusive(min,max)
+* @derief fonction qui retourne une valeur compris entre min et max y compris
+* @param min valeur min
+* @param max valeur max
+* @return une valeur comprise entre les valeurs min et max
+*/
+function getRandomIntInclusive(min, max) {
+   min = Math.ceil(min);
+   max = Math.floor(max);
+   return Math.floor(Math.random() * (max - min +1)) + min;
+}
+
+/** fonction randomColor
+* @debrif permet de générer une couleur aléatoire
+* @return la couleur
+*/
+function randomColor(){
+   return 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 }

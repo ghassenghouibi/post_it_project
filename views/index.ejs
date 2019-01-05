@@ -10,11 +10,24 @@
         <script src="../controller/screencontroller.js"></script>
     </head>
     <body>
-        <% include ./partials/header %>
+        <div class="card text-center">      
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item"> <a class="nav-link active" href="/">Accueil</a> </li>
+                    <li class="nav-item"> <a class="nav-link active" href="/inscription">Inscription</a> </li>
+                    <li class="nav-item"> <a class="nav-link active" href="/connexion">Connexion</a> </li>
+                </ul>
+            </div>   
+        </div>
         <h1 class="text-center">Post it / Love it</h1>
         <div class="text-center">
                 <img src="../public/images/post_animation.gif" class="rounded" alt="picture" width="800" height="600">
         </div>
-        <% include ./partials/footer %>
+
+    <footer class="footer">
+        <div class=" text-center">
+            <span class="text-muted" > Copyright &copy; 2018 Ghouibi Ghassen</span>
+        </div>
+    </footer>            
     </body>
 </html>
