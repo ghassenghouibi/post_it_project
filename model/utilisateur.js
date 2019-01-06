@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 /** Class Database 
- * @brief permet le controle de la base de données et comporte des méthodes qui vont permettre de manipuler la base de données
+* @brief permet le controle de la base de données et comporte des méthodes qui vont permettre de manipuler la base de données
 */
 class Database{
 
@@ -49,7 +49,7 @@ class Database{
     * @param email l'email de l'utilisateur
     * @param motdepasse  le nouveau mot de passe
     */
-    mettreAjourLecompteUtilisateur(email,motdepasse){
+   mettreAjourLecompteUtilisateur(email,motdepasse){
         let encrpytpassword=bcrypt.hashSync(motdepasse, null, null);
         var update="UPDATE utilisateur SET motdepasse=? WHERE email=?";
         connection.query(update,[encrpytpassword,email],function(err){
@@ -78,7 +78,7 @@ class Database{
         
     }
     /**  fonction chercherLutilisateurDansLabaseDeDonnees(email,motdepasse,done)
-    * @debrif cette fonction permet de rechercher si un utilisateur exsiste ou pas dans la basse de données
+    * @debrif cette fonction permet de rechercher si un utilisateur existe ou pas dans la basse de données
     * @param email l'email de l'utilisateur
     * @param motdepasse le mot de passe de l'utilisateur
     * @param done le paramètre de récupération

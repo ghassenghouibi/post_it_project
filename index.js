@@ -1,11 +1,11 @@
 /*--------------------------------------------------------------------Require-Module-----------------------------------------------------------------------------------------*/
-const express=require('express');
-const bodyParser=require('body-parser');
-const jwt=require('jsonwebtoken');
-const expressJwt=require('express-jwt');
-const nodemailer = require('nodemailer');
-const DB=require('./model/utilisateur');
-const app=express();
+const express    =require('express');
+const bodyParser =require('body-parser');
+const jwt        =require('jsonwebtoken');
+const expressJwt =require('express-jwt');
+const nodemailer =require('nodemailer');
+const DB         =require('./model/utilisateur');
+const app        =express();
 var   urlencodedParser=bodyParser.urlencoded({extended:false});
 const dataBase=new DB();
 

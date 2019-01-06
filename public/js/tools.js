@@ -205,9 +205,10 @@ function elementFactory(id,type,text,x,y,color){
    element.style.font='x-large arial, sans-serif';
    element.style.wordWrap='break-word';
    element.style.position='absolute';
-   //if(x<0 || y <0 ||y > window.innerHeight-250 || x >window.innerWidth-200){
-   //   element.style.display='none';
-   //}
+   if(x<0 || y <0 ||y > window.innerHeight-125 || x >window.innerWidth-100){
+      console.log("->",x,y);
+      element.style.display='none';
+   }
    element.style.WebkitBorderBottomRightRadius="500px 20px";
    element.style.BoxShadow='10px 10px 5px #656565';
    element.style.left=x+"px";

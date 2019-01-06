@@ -2,8 +2,8 @@ window.onload=main;
 //nombre de tentative de connexion effectuer
 var nombredetentative=0;
 /** Class Vue
- * @debrif cette classe permet les changement de vues  
- */
+* @debrif cette classe permet les changement de vues  
+*/
 class Vue{
     
     constructor(){}
@@ -17,9 +17,9 @@ class Vue{
         if (localStorage.getItem("token") != null && window.location!="/home") window.location="/home";
     }
     /** changerLaVue()
-     * @method changerLaVue
-     * @debrif Cette méthode permet de changer la vu entre deux champs
-     */
+    * @method changerLaVue
+    * @debrif Cette méthode permet de changer la vu entre deux champs
+    */
     changerLaVue(){
         let element=document.getElementById('champdeconnexion');
         let tentative=document.getElementById('tentative');
@@ -29,12 +29,12 @@ class Vue{
 
 }
 /** fonction connexionUtilisateur(event,email,password)
- * @debrif cette fonction permet de faire une rêquete au serveur pour la connexion si tous se passe bien on aura un token sinon l'element danger s'affiche 
- * au bout de la troisème tentative la fonction change la vue vers mot de passe oublié
- * @param event event 
- * @param email email de l'utilisateur
- * @param password mot de passe de l'utilisateur
- */
+* @debrif cette fonction permet de faire une rêquete au serveur pour la connexion si tous se passe bien on aura un token sinon l'element danger s'affiche 
+* au bout de la troisème tentative la fonction change la vue vers mot de passe oublié
+* @param event event 
+* @param email email de l'utilisateur
+* @param password mot de passe de l'utilisateur
+*/
 function connexionUtilisateur(event,email,password) {		
         event.preventDefault();
         var form=document.getElementById('formconnexion');
@@ -79,4 +79,3 @@ function main(){
     
 
 }
-

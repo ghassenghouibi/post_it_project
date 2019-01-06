@@ -1,2 +1,11 @@
 # post_it_project
-On a tendance a oublié nos idées,ou a repartir les tâches du coup, certains gens se servent des post_it Dans le cadre du cours de dévelepment web je vais créer un site à l'aide de html,css,javascript, coté Front End et coté back End je vais travailler avec nodejs et phpmyadmin qui va gérer ma base de données le principe est simple faire une API qui à la fois se sert du identification et aussi qui permet de notés nos idéés dans des posts it mais avec un effet et pour ça je vais me servir d'un algorithm qui permet de mettre les post-it par tout et suivre la souris d'utilisateur et lui passer les posts it nécessaire
+
+
+Il Faut Télécharger les modules suivant :
+
+    commande :npm install bcrypt-nodejs body-parser ejs express jsonwebtoken mysql express-jwt nodemailer nodemon --save
+ 
+Pour lancer le serveur :
+    npm start index.js
+
+
