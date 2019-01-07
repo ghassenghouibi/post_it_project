@@ -44,7 +44,6 @@ CREATE TABLE `post_it` (
 --
 
 INSERT INTO `post_it` (`iduser`, `idPostit`, `coordonneesX`, `coordonneesY`, `distance`, `angleX`, `text`, `couleur`) VALUES
-(2, 1, 1267, 296, 363.427, 18.5594, 'bonjour', 'rgb(252,248,30)'),
 (1, 1, 577, 312, 422.553, 10.7052, 'un premier post-it', 'rgb(157,158,29)'),
 (1, 2, 1226, 223, 377.243, 40.6439, 'un deuxième', 'rgb(197,179,102)'),
 (1, 3, 35, 461, 925.47, 6.60303, 'un troisème', 'rgb(74,74,223)');
