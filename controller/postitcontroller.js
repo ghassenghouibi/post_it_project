@@ -161,6 +161,7 @@ function deplacement(element,position){
         }
     }
     else{
+        
         if(x<window.innerWidth && x>0){
             element.style.top=(y-5)+"px";
         }
