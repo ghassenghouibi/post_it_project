@@ -3,22 +3,22 @@ window.onload = main;
 var id=recupererNbPostit();
 var catchId=new Array();
 var tableaudepostit=new Array();
+var tauxX=window.innerWidth;
+var tauxY=window.innerHeight;
 /*--------------------------------------------------------------Fonction-Principal--------------------------------------------------------------------------------------------*/
 function main (){
-    console.log("=============",window.innerWidth,window.innerHeight);
-    console.log("=============",window.innerWidth/window.innerHeight);
-
+    console.log("distance ",window.innerWidth-window.innerHeight);
     recupererPostItDuServeur();
     boucleDeselectionDePostit();
     var supprimer=new ButtonSupprimer("Supprimer","btn btn-danger","glyphicon glyphicon-trash",0,undefined,undefined,0);
-    var ajouter=new ButtonAjouter("Ajouter","btn btn-success","glyphicon glyphicon-plus-sign",undefined,0,undefined,0);
+    var ajouter=new ButtonAjouter("Ajouter","btn btn-success","glyphicon glyphicon-plus",undefined,0,undefined,0);
     var deconnexion=new ButtonDeconnexion("Deconnexion","btn btn-warning","glyphicon glyphicon-log-out",undefined,0,0,undefined);
     var play=new ButtonPlay("Bouger","btn btn-info","glyphicon glyphicon-play-circle",0,0,undefined,undefined);
     tableaudepostit.push(createObject("S",0,window.innerHeight,0,0));
     tableaudepostit.push(createObject("A",window.innerWidth,window.innerHeight,0,0));
     tableaudepostit.push(createObject("D",window.innerWidth,0,0,0));
     tableaudepostit.push(createObject("B",0,0,0,0));
-    blob(window.innerWidth/2 -25 ,window.innerHeight/2 -25,"blob");  
+    blob(window.innerWidth/2 -25 ,window.innerHeight/2 -25,"blob");
 }
 /*-----------------------------------------------------------------------Fonctions--------------------------------------------------------------------------------------------*/
 /** fonction deconnexion() 
@@ -28,14 +28,15 @@ function main (){
 function deconnexion(){
     window.location = "/";
     localStorage.removeItem('token');
+    sessionStorage.removeItem('clicked');
 }
 /** fonction selectXById(tableaudepostit,id)
 * @debrif cette fonction permet de selectionner les coordonnées x dans le tableau de post-it par l'id de l'element
 * @param tableaudepostit le tableau de post-it
 * @param id l'id de l'element
 */
-function selectXById(tableaudepostit,id){
-    for(let i = 0 ;i<tableaudepostit.length;i++){
+function selectXById(id){
+    for(let i = 4 ;i<tableaudepostit.length;i++){
         if(tableaudepostit[i].id==id){
             return tableaudepostit[i].posx;
         }
@@ -46,8 +47,8 @@ function selectXById(tableaudepostit,id){
 * @param tableaudepostit le tableau de post-it
 * @param id l'id de l'element
 */
-function selectYById(tableaudepostit,id){
-    for(let i = 0 ;i<tableaudepostit.length;i++){
+function selectYById(id){
+    for(let i = 4 ;i<tableaudepostit.length;i++){
         if(tableaudepostit[i].id==id){
             return tableaudepostit[i].posy;
         }
@@ -75,10 +76,15 @@ function boucleDeselectionDePostit(){
 * @param y les coordonées y
 */
 function verifierDepassement(element){
-    element.style.left=selectXById(tableaudepostit,element.id)+"px";
-    element.style.top=selectYById(tableaudepostit,element.id)+"px";
-    console.log("1=> ",element.style.left);
-    console.log("2=> ",element.style.top);
+    var passed=sessionStorage.getItem(element.id);
+    if(passed=='Bien passé'){
+        console.log('Bien passé');
+        element.style.left=selectXById(element.id)+"px";
+        element.style.top=selectYById(element.id)+"px";
+        sessionStorage.removeItem(element.id);
+    }
+  
+    
 }
 /** fonction verifierApparition(element,x,y)
 * @debrif cette fonction permet d'afficher l'element ou le cacher vu que l'element inserer en dehors de l'ecran ne sont pas visible
@@ -86,50 +92,87 @@ function verifierDepassement(element){
 * @param x les coordonnées x
 * @param y les coordonées y
 */
-function verifierApparition(element,x,y){
-
+function verifierApparition(element){
+    let x=parseInt(element.style.left.split("px")[0]);
+    let y=parseInt(element.style.top.split("px")[0]);
     if( x>=0 && y>=0 && (x<window.innerWidth-100) && (y<window.innerHeight-125)){
         console.log('ON');
+        sessionStorage.setItem(element.id,'oui');
         element.style.display='block';
 
     }
     else {
+        let passed=sessionStorage.getItem(element.id);
+        if(passed=='oui'){
+            sessionStorage.setItem(element.id,'Bien passé');
+        }
         console.log('OFF');
         element.style.display='none';
     }
 }
+
 /** fonction deplacement(element,position)
 * @debrif cette fonction permet le deplacement d'un element en fonction de sa position
 * @param element l'element
 * @param position la position de l'element
 */
 function deplacement(element,position){
-    let x=(extractleft(element));
-    let y=(extracttop(element));
-    //verifierApparition(element,x,y);
-    //console.log("x , y ",x,y);
-    switch(position){
-        case "ll":
-            element.style.left=(x+5)+"px";
-            element.style.top=(y+5)+"px";
-            break;
-        case "lb":
-            element.style.left=(x+5)+"px";
-            element.style.top=(y-5)+"px";
-            break;
-        case "rr":
-            element.style.left=(x-5)+"px";
-            element.style.top=(y+5)+"px"; 
-            break;
-        case "rb":
-            element.style.left=(x-5)+"px";
-            element.style.top=(y-5)+"px";
-            break;
-        default:
-            break;
-    }
-    //verifierDepassement(element);
     
+    let x=parseInt(element.style.left.split("px")[0]);
+    let y=parseInt(element.style.top.split("px")[0]);
+
+    if(position=="ll"){
+        if(x<window.innerWidth && x>0){
+            element.style.top=(y+5)+"px";
+        }
+        if(y<window.innerHeight && y>0){
+            element.style.top=(x+5)+"px";
+        }
+        if(x<window.innerWidth && x>0 && y<window.innerHeight && y>0){
+            element.style.top=(y+5)+"px";
+            element.style.left=(x+5)+"px";
+
+        }
+    }
+    else if(position=="rr"){
+        if(x<window.innerWidth && x>0){
+            element.style.top=(y+5)+"px";
+        }
+        if(y<window.innerHeight && y>0){
+            element.style.top=(x-5)+"px";
+        }
+        if(x<window.innerWidth && x>0 || y<window.innerHeight && y>0){
+            element.style.top=(y+5)+"px";
+            element.style.left=(x-5)+"px";
+
+        }
+    }
+    else if(position=="lb"){
+        if(x<window.innerWidth && x>0){
+            element.style.top=(y-5)+"px";
+        }
+        if(y<window.innerHeight && y>0){
+            element.style.top=(x+5)+"px";
+        }
+        if(x<window.innerWidth && x>0 || y<window.innerHeight && y>0){
+            element.style.top=(y-5)+"px";
+            element.style.left=(x+5)+"px";
+
+        }
+    }
+    else{
+        if(x<window.innerWidth && x>0){
+            element.style.top=(y-5)+"px";
+        }
+        if(y<window.innerHeight && y>0){
+            element.style.top=(x-5)+"px";
+        }
+        if(x<window.innerWidth && x>0 || y<window.innerHeight && y>0){
+            element.style.top=(y-5)+"px";
+            element.style.left=(x-5)+"px";
+
+        }
+    }
 }
 /** fonction target(e)
 * @debrif cette fonction permet de suivre les coordonnées de la souris de l'utilisateur dans l'écran 
@@ -160,11 +203,15 @@ function target(e){
                         break;
                     default:
                         break;
-                    }
-                    
                 }
+                verifierApparition(element);
+                verifierDepassement(element);
+             
             }
         }
+    }
+    
+
 }
 /** fonction play(e)
 * @debrif cette fonction permet d'excuter l'evenement target ou pas ça dépend du click qui est lier au button play
@@ -173,10 +220,10 @@ function target(e){
 function play(e){
     e.stopImmediatePropagation();    
     var clicked = sessionStorage.getItem('clicked');
-    if(clicked == 'yes') sessionStorage.setItem('clicked','no');
-    else  sessionStorage.setItem('clicked','yes');
+    if(clicked == 'oui') sessionStorage.setItem('clicked','non');
+    else  sessionStorage.setItem('clicked','oui');
     
-    if (clicked == 'yes') {
+    if (clicked == 'oui') {
         alert(`Play On vous avez ${tableaudepostit.length-4} post-it`);
         window.addEventListener("mousemove",target);
     }
@@ -189,8 +236,6 @@ function play(e){
     }
 }
 
-
-
 /*-------------------------------------------------------------------------Class----------------------------------------------------------------------------------------------*/
 
 /** Class Post-it prendra en charge la création de l'ajout d'un post-it  
@@ -199,7 +244,9 @@ function play(e){
 class Postit{
     constructor(){}
     ajouterPostit(){
-        var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
+        //var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
+        var text="text t1 t2";
+
         var post_it = {
             id:(++id),
             type:'div',
@@ -211,15 +258,17 @@ class Postit{
             couleur:randomColor()
         };
        
-        
         while(verifierLacollision(post_it.axeX,post_it.axeY,tableaudepostit)!=1){
-            if(tableaudepostit.length>15){
-                post_it.axeX=getRandomIntInclusive((-window.innerWidth)*1.5,window.innerWidth*1.5);
-                post_it.axeY=getRandomIntInclusive((-window.innerHeight)*1.5,window.innerHeight*1.5);
+            if(tableaudepostit.length>10){
+                tauxX+=200;
+                tauxY+=250;
+                post_it.axeX=getRandomIntInclusive(-window.innerWidth,window.innerWidth);
+                post_it.axeY=getRandomIntInclusive(-window.innerHeight,window.innerHeight);
+                console.log("666>>",tauxX,tauxY);
             }
             else{
-                post_it.axeX=getRandomIntInclusive(0,window.innerWidth);
-                post_it.axeY=getRandomIntInclusive(0,window.innerHeight);
+                post_it.axeX=getRandomIntInclusive(0,window.innerWidth-250);
+                post_it.axeY=getRandomIntInclusive(0,window.innerHeight-250);
             }
         }
         post_it.distance=calculdistance(post_it.axeX,post_it.axeY);
@@ -313,7 +362,7 @@ class DragAndDrop{
         e.preventDefault();
         var alerted = sessionStorage.getItem('alerted') || '';
         if (alerted != 'yes') {
-            alert("Element Will be Deleted !");
+            alert("Le Post-it sera supprimée attention !");
             sessionStorage.setItem('alerted','yes');
         }
     }
@@ -333,7 +382,6 @@ class DragAndDrop{
     /** fonction dragDrop()
     * @debrif quand l'evenement drop se déclenche cette fonction permet de supprimer le post-it grâce à l'id dans le tableau catchId
     */
-    //TODO corriger la suppression dans tableau récuperation
     dragDrop(){
         let element=document.getElementById(catchId[0]);
         suppressionPosTit(catchId[0]);

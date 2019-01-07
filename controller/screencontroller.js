@@ -45,7 +45,7 @@ function connexionUtilisateur(event,email,password) {
             if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
                 if(JSON.parse(xhr.response)!="Email ou mot de passe incorrect"){
                     localStorage.setItem('token', xhr.response);
-                    sessionStorage.setItem('clicked','yes');
+                    sessionStorage.setItem('clicked','oui');
                     window.location.href="/home";
                 }
                 else{
