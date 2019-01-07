@@ -25,3 +25,10 @@ Ce projet aura besoin :
 
     Pour lancer le serveur :
         npm start index.js
+    Un test rapide se connecter avec le compte:
+    email:user@gmail.com
+    mot de passe : motdepasse
+
+Le rapport se trouve dans le dossier /public/documentation/:
+-compterendufinal.pdf
+

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le :  Dim 06 jan. 2019 à 03:12
+-- Généré le :  lun. 07 jan. 2019 à 20:45
 -- Version du serveur :  10.1.37-MariaDB
 -- Version de PHP :  7.3.0
 
@@ -44,11 +44,10 @@ CREATE TABLE `post_it` (
 --
 
 INSERT INTO `post_it` (`iduser`, `idPostit`, `coordonneesX`, `coordonneesY`, `distance`, `angleX`, `text`, `couleur`) VALUES
-(1, 1, 169, 339, 805.378, 2.19623, 'hello world', 'rgb(34,8,170)'),
-(1, 3, 461, 663, 527.975, 6.78897, 'hello world II', 'rgb(164,163,133)'),
-(1, 4, 1415, 778, 538.22, 24.5958, 'toto', 'rgb(230,202,202)'),
-(1, 5, 754, 846, 410.873, 65.3037, 'foo', 'rgb(206,14,128)'),
-(1, 6, 1400, 452, 441.681, 14.2739, 'bar', 'rgb(236,72,144)');
+(2, 1, 1267, 296, 363.427, 18.5594, 'bonjour', 'rgb(252,248,30)'),
+(1, 1, 577, 312, 422.553, 10.7052, 'un premier post-it', 'rgb(157,158,29)'),
+(1, 2, 1226, 223, 377.243, 40.6439, 'un deuxième', 'rgb(197,179,102)'),
+(1, 3, 35, 461, 925.47, 6.60303, 'un troisème', 'rgb(74,74,223)');
 
 -- --------------------------------------------------------
 
@@ -69,7 +68,7 @@ CREATE TABLE `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `email`, `motdepasse`) VALUES
-(1, 'utilisateur', 'utilisateur', 'utilisateur@gmail.com', '$2a$10$pz4MnI1/1LkdZon9w2suL.pt/oTgROKaKIXzl6rpTYHQB8Yd20hwa');
+(1, 'user', 'user', 'user@gmail.com', '$2a$10$TuDddJly/eZsYyt8soNoQeXYemLrCk6.N5B4dG4a8R5oxBlfumu32');
 
 --
 -- Index pour les tables déchargées
