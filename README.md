@@ -1,9 +1,6 @@
 # post_it_project
 
-
-
-<img src="/home/hope/Documents/Latex/interface.png" width="124" height="124"></div>
-                    
+Le  but  de  projet  est  de  disséminer  des  post-it  virtuels  sur  un  repère infinie,Ces  derniers  vont  suivre  les  mouvements  du  curseur  à  l'aide  de  la souris pour être chargé par le navigateur donc chaque utilisateur aura un compte personnel pour noté ces propres idée.
 
 Ce projet aura besoin :
 
@@ -22,8 +19,9 @@ Ce projet aura besoin :
     Serveur:
 
     Télécharger node https://nodejs.org/en/download/
+    
     Télécharger les modules suivant:
         npm install bcrypt-nodejs body-parser ejs express jsonwebtoken mysql express-jwt nodemailer nodemon --save
 
-Pour lancer le serveur :
-    npm start index.js
+    Pour lancer le serveur :
+        npm start index.js

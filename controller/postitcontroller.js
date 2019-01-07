@@ -3,8 +3,6 @@ window.onload = main;
 var id=recupererNbPostit();
 var catchId=new Array();
 var tableaudepostit=new Array();
-var tauxX=window.innerWidth;
-var tauxY=window.innerHeight;
 /*--------------------------------------------------------------Fonction-Principal--------------------------------------------------------------------------------------------*/
 function main (){
     console.log("distance ",window.innerWidth-window.innerHeight);
@@ -161,7 +159,7 @@ function deplacement(element,position){
         }
     }
     else{
-        
+
         if(x<window.innerWidth && x>0){
             element.style.top=(y-5)+"px";
         }
@@ -245,9 +243,7 @@ function play(e){
 class Postit{
     constructor(){}
     ajouterPostit(){
-        //var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
-        var text="text t1 t2";
-
+        var text=prompt('Ecrivez le Text de post it S\'il vous plait'); 
         var post_it = {
             id:(++id),
             type:'div',
@@ -261,11 +257,8 @@ class Postit{
        
         while(verifierLacollision(post_it.axeX,post_it.axeY,tableaudepostit)!=1){
             if(tableaudepostit.length>10){
-                tauxX+=200;
-                tauxY+=250;
                 post_it.axeX=getRandomIntInclusive(-window.innerWidth,window.innerWidth);
                 post_it.axeY=getRandomIntInclusive(-window.innerHeight,window.innerHeight);
-                console.log("666>>",tauxX,tauxY);
             }
             else{
                 post_it.axeX=getRandomIntInclusive(0,window.innerWidth-250);
